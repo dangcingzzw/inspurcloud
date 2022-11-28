@@ -1,5 +1,5 @@
 {
-	"name" : "inspurcloud/lc-oss-sdk",
+	"name" : "inspurcloud/php-oss-sdk",
 	"description" : "OBS PHP SDK",
 	"license":"Apache-2.0",
 	"version":"1.0.9",
