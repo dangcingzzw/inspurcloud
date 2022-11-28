@@ -1,0 +1,26 @@
+{
+	"name" : "inspurcloud/lc-oss-sdk",
+	"description" : "OBS PHP SDK",
+	"license":"Apache-2.0",
+	"version":"1.0.9",
+	"require" : {
+		"php" : ">=5.6.0",
+		"guzzlehttp/guzzle" : "^6.3.0 || ^7.0",
+		"guzzlehttp/psr7" : "^1.4.2 || ^2.0",
+		"monolog/monolog" : "^1.23.0 || ^2.0"
+	},
+	
+	"license": "MIT",
+   	 "authors": [
+       	 {
+           	 "name": "dangicngzzw",
+          	  "email": "dangicngzzw@163.com"
+       	 }
+  	  ],
+   	 "minimum-stability": "dev",
+    	"autoload": {
+       		 "psr-4": {
+            		 "Obs\\": "src/Obs"
+      	  }
+    }
+}
