@@ -2,7 +2,7 @@
 
 ## 安装
 
-* 推荐使用 `composer` 进行安装。可以使用 composer.json 声明依赖，或者运行下面的命令。SDK 包已经放到这里 [`qiniu/php-sdk`][install-packagist] 。
+* 推荐使用 `composer` 进行安装。可以使用 composer.json 声明依赖，或者运行下面的命令。SDK 包已经放到这里 [`Inspur/php-sdk`][install-packagist] 。
 ```bash
 $ composer require inspur/php-oss-sdk
 ```
@@ -44,4 +44,4 @@ $obsClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' =>
 
 [packagist]: http://packagist.org
 
-[install-packagist]: https://packagist.org/packages/lcsdk/php-oss-sdk
+[install-packagist]: https://packagist.org/packages/Inspur/php-oss-sdk
