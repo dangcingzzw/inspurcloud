@@ -120,6 +120,31 @@ class V2RequestResource
                     ]
                 ]
             ],
+            'blindWatermarkDecodeOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-obs-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
             'blindWatermarkOperation' => [
                 'httpMethod' => 'GET',
                 'requestParameters' => [
@@ -401,7 +426,7 @@ class V2RequestResource
                     ]
                 ]
             ],
-            'imageFlipOperation' => [
+            'flipOperation' => [
                 'httpMethod' => 'GET',
                 'requestParameters' => [
                     'ACL' => [
@@ -3086,7 +3111,7 @@ class V2RequestResource
                         'location' => 'dns'
                     ],
                     'Key' => [
-                        'required' => true,
+                        'required' => false,
                         'type' => 'string',
                         'location' => 'uri'
                     ],

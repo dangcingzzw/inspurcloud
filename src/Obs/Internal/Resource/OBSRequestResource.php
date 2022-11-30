@@ -2849,9 +2849,13 @@ class OBSRequestResource
                         'location' => 'dns'
                     ],
                     'Key' => [
-                        'required' => true,
+                        'required' => false,
                         'type' => 'string',
                         'location' => 'uri'
+                    ],
+                    'random-object-name' => [
+                        'type' => 'bool',
+                        'location' => 'dns'
                     ],
                     'ContentMD5' => [
                         'type' => 'string',

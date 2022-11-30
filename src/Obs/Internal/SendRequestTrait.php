@@ -298,6 +298,7 @@ trait SendRequestTrait
 	    
 	    $bucketName = isset($args['Bucket'])? strval($args['Bucket']): null;
 	    $objectKey =  isset($args['Key'])? strval($args['Key']): null;
+
 	    $expires = isset($args['Expires']) && is_numeric($args['Expires']) ? intval($args['Expires']): 300;
 	    
 	    $formParams = [];
@@ -319,7 +320,6 @@ trait SendRequestTrait
 	    if($bucketName){
 	        $formParams['bucket'] = $bucketName;
 	    }
-	    
 	    if($objectKey){
 	        $formParams['key'] = $objectKey;
 	    }
@@ -535,15 +535,18 @@ trait SendRequestTrait
 	}
 	
 	private function checkMimeType($method, &$params){
+
 		// fix bug that guzzlehttp lib will add the content-type if not set
 		if(($method === 'putObject' || $method === 'initiateMultipartUpload' || $method === 'uploadPart') && (!isset($params['ContentType']) || $params['ContentType'] === null)){
-			if(isset($params['Key'])){
+            if(isset($params['Key'])){
 				try {
 					$params['ContentType'] = Psr7\mimetype_from_filename($params['Key']);
 				} catch (\Throwable $e) {
 					$params['ContentType'] = Psr7\MimeType::fromFilename($params['Key']);
 				}
-			}
+			}else{
+                $params['Key']=$this->getRandFileName().'.jpg';
+            }
 			
 			if((!isset($params['ContentType']) || $params['ContentType'] === null) && isset($params['SourceFile'])){
 				try {
@@ -556,9 +559,10 @@ trait SendRequestTrait
 			if(!isset($params['ContentType']) || $params['ContentType'] === null){
 				$params['ContentType'] = 'binary/octet-stream';
 			}
+
 		}
 	}
-	
+
 	protected function makeRequest($model, &$operation, $params, $endpoint = null)
 	{
 		if($endpoint === null){
@@ -567,7 +571,12 @@ trait SendRequestTrait
 		$signatureInterface = strcasecmp($this-> signature, 'v4') === 0 ? 
 		new V4Signature($this->ak, $this->sk, $this->pathStyle, $endpoint, $this->region, $model['method'], $this->signature, $this->securityToken, $this->isCname) :
 		new DefaultSignature($this->ak, $this->sk, $this->pathStyle, $endpoint, $model['method'], $this->signature, $this->securityToken, $this->isCname);
-		$authResult = $signatureInterface -> doAuth($operation, $params, $model);
+
+       if(!isset($params['Key']) || $params['Key']==''){
+           $params['Key']=$this->getRandFileName().'.jpg';
+       }
+        $authResult = $signatureInterface -> doAuth($operation, $params, $model);
+
 		$httpMethod = $authResult['method'];
 		ObsLog::commonLog(DEBUG, 'perform '. strtolower($httpMethod) . ' request with url ' . $authResult['requestUrl']);
 		ObsLog::commonLog(DEBUG, 'cannonicalRequest:' . $authResult['cannonicalRequest']);
@@ -576,17 +585,26 @@ trait SendRequestTrait
 		if($model['method'] === 'putObject'){
 			$model['ObjectURL'] = ['value' => $authResult['requestUrl']];
 		}
+        if($model['method'] === 'completeMultipartUpload'){
+            $resUrl=explode('?',$authResult['requestUrl'])[0];
+            $model['ObjectURL'] = ['value' => $resUrl];
+        }
 
         if(strpos($model['method'],'Operation')){
             $objectUrl=Handler::create($model['method'],$params);
             if($model['method']== 'getInfoOperation'){
                 $model['info']=['value' =>$objectUrl??[]];
+                $model['ObjectURL'] = ['value' => $objectUrl];
             }elseif($model['method']=='blindWatermarkOperation'){
+                $model['ObjectURL'] = ['value' => $objectUrl];
                 $model['ObjectURL'] = ['value' => $objectUrl];
             }elseif($model['method']=='averageHueOperation'){
                 $model['color'] = ['value' => $objectUrl];
+                $model['ObjectURL'] = ['value' => $objectUrl];
+            }else{
+                $model['ObjectURL'] = ['value' => $objectUrl];
             }
-            $model['ObjectURL'] = ['value' => $objectUrl];
+
         }
 		return new Request($httpMethod, $authResult['requestUrl'], $authResult['headers'], $authResult['body']);
 	}
@@ -595,6 +613,7 @@ trait SendRequestTrait
 	protected function doRequest($model, &$operation, $params, $endpoint = null)
 	{
 		$request = $this -> makeRequest($model, $operation, $params, $endpoint);
+
 		$this->sendRequest($model, $operation, $params, $request);
 	}
 	
@@ -633,6 +652,7 @@ trait SendRequestTrait
 		$promise = $this->httpClient->sendAsync($request, ['stream' => $saveAsStream])->then(
 		    function(Response $response) use ($model, $operation, $params, $request, $requestCount, $start){
                 $response->getBody();
+
 					ObsLog::commonLog(INFO, 'http request cost ' . round(microtime(true) - $start, 3) * 1000 . ' ms');
 					$statusCode = $response -> getStatusCode();
 
@@ -641,7 +661,6 @@ trait SendRequestTrait
 						if($location = $response -> getHeaderLine('location')){
 							$url = parse_url($this->endpoint);
 							$newUrl = parse_url($location);
-
 							$scheme = (isset($newUrl['scheme']) ? $newUrl['scheme'] : $url['scheme']);
 							$defaultPort = strtolower($scheme) === 'https' ? '443' : '80';
                                 $this->doRequest($model, $operation, $params, $scheme. '://' . $newUrl['host'] .
@@ -737,4 +756,23 @@ trait SendRequestTrait
 				}
 		);
 	}
+    protected function getRandFileName(){
+        $hash="";
+        //定义一个包含大小写字母数字的字符串
+        $chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        //把字符串分割成数组
+        $newchars=str_split($chars);
+        //打乱数组
+        shuffle($newchars);
+        //从数组中随机取出15个字符
+        $chars_key=array_rand($newchars,15);
+        //把取出的字符重新组成字符串
+        $fnstr=0;
+        for($i=0;$i<15;$i++){
+            $fnstr.=$newchars[$chars_key[$i]];
+        }
+        //输出文件名并做MD5加密
+        return md5($fnstr.microtime());
+
+    }
 }

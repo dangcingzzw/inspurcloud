@@ -43,7 +43,7 @@ define('EMERGENCY', Logger::EMERGENCY);
 
 /**
  * @method Model rotateOperation(array $args = []);
- * @method Model rlipOperation(array $args = []);
+ * @method Model flipOperation(array $args = []);
  * @method Model resizeOperation(array $args = []);
  * @method Model brightOperation(array $args = []);
  * @method Model contrastOperation(array $args = []);
@@ -321,7 +321,7 @@ class ObsClient
 		if(filter_var($host, FILTER_VALIDATE_IP) !== false) {
 		    $this -> pathStyle = true;
 		}
-				
+
 		$handler = self::choose_handler($this);
 		
 		$this -> httpClient = new Client(

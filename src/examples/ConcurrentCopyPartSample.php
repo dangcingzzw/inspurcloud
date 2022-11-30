@@ -78,7 +78,9 @@ try
 	/*
 	 * Upload an object to your source bucket
 	 */
-	$obsClient -> putObject(['Bucket' => $sourceBucketName, 'Key' => $sourceObjectKey, 'SourceFile' => $sampleFilePath]);
+	$obsClient -> putObject(['Bucket' => $sourceBucketName,
+        'Key' => $sourceObjectKey, 'SourceFile' => $sampleFilePath,
+        'random-object-name'=>true]);
 	
 	/*
 	 * Claim a upload id firstly

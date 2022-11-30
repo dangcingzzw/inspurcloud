@@ -70,6 +70,18 @@ try
             ]
         ]
     ]);
+    /**
+     * value:horizontal（水平翻转） vertical（垂直翻转）
+     */
+    printf("图片处理-翻转-测试用例");
+    $obsClient -> flipOperation([
+        'body'=>[
+            'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
+            'instruction'=>[
+                'value' => '30',
+            ]
+        ]
+    ]);
     /*
      * 图片缩略方法
      * file:需要处理的文件全路径名称
@@ -201,7 +213,7 @@ try
                 'font'=>'5oCd5rqQ5a6L5L2T',
                 'color'=>'263d29',
                 'size'=>'40',
-                'position'=>'tl',
+                'position'=>'top',
                 'x'=>'0',
                 'y'=>'0',
                 'transparency'=>100
@@ -209,12 +221,20 @@ try
         ]
     ]);
 
-    printf("图片处理-获取图片色调-测试用例");
-    $obsClient -> averageHueOperation([
-        'body'=>[
-            'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
-        ]
-    ]);
+    /**
+     * type:可选参数text,image
+     * content:文本内容或图片base64格式数据
+     */
+    printf("图片处理-盲水印 -测试用例");
+        $obsClient->blindWatermarkOperation([
+            'body' => [
+                'file' => $filePath,
+                'instruction' => [
+                    'type' => 'text',
+                    'content' => 'abcdef',
+                ]
+            ]
+        ]);
 
     printf("图片管道处理-缩略，裁剪，旋转等-测试用例");
     $obsClient -> pannelMogrOperation([

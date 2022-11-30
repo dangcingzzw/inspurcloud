@@ -51,15 +51,16 @@ class PannelMogrOperation{
                 case 'circle':
                     $item= '/'.$key.','.'r_'.$v['radius'];
                     break;
-                case 'roundedCorners':
+                case 'rounded-corners':
                     $item= '/'.$key.','.'r_'.$v['radius'];
                     break;
-//                case 'formatConversion':
-//                    $item= '/'.'format'.','.$v['type'];
-//                    break;
+                case 'format-conversion':
+                    $item= '/'.'format'.','.$v['type'];
+                    break;
                 default:
                     break;
             }
+
            if($item!=''){
                array_push($arr,$item);
            }

@@ -18,7 +18,7 @@
 namespace Obs\Internal\Process;
 use Obs\ObsException;
 
-class BlindWatermarkOperation{
+class BlindWatermarkDecodeOperation{
     public static function main($params) {
         $instr_name= 'blind-watermark';
         $fileName=$params['body']['file'];
@@ -26,16 +26,12 @@ class BlindWatermarkOperation{
         if(!isset($instruction['type'])){
             throw new ObsException();
         }
-        $domain = $fileName.'?x-oss-process=image/';
-        $type='text';
         $instruction['content']=base64_encode($instruction['content']);
         if($instruction['type']=='image'){
-            $instr_name.=',type_encode,image_'.$instruction['content'];
+            return $fileName.'?x-oss-process=image/blind-watermark,type_imagedecode';
         }else{
-            $instr_name.=',type_encode,text_'.$instruction['content'];
+            return $fileName.'?x-oss-process=image/blind-watermark,type_textdecode,text_'.$instruction['content'];
         }
-        return $domain.$instr_name;
-
 
     }
 }
