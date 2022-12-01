@@ -2,9 +2,9 @@
 
 ## 安装
 
-* 推荐使用 `composer` 进行安装。可以使用 composer.json 声明依赖，或者运行下面的命令。SDK 包已经放到这里 [`qiniu/php-sdk`][install-packagist] 。
+* 推荐使用 `composer` 进行安装。可以使用 composer.json 声明依赖，或者运行下面的命令。
 ```bash
-$ composer require inspur/php-oss-sdk
+$ composer require inspurcloud/php-oss-sdk
 ```
 * 直接下载安装，SDK 没有依赖其他第三方库，但需要参照 composer 的 autoloader，增加一个自己的 autoloader 程序。
 
@@ -12,7 +12,7 @@ $ composer require inspur/php-oss-sdk
 
 | Inspur SDK版本 | PHP 版本 |
 |:--------------------:|:---------------------------:|
-|          1.x         |  cURL extension,   5.3 - 5.6,7.0 |
+|          1.x         |  cURL extension,   5.3 - 5.6,7.0+ |
 
 ## 使用方法
 
