@@ -27,7 +27,7 @@ class WatermarkOperation{
             throw new OSSException();
         }
         $type=$instruction['type'];
-//        $instruction['content']=base64_encode($instruction['content']);
+       $instruction['content']=base64_encode($instruction['content']);
         $instruction['content']=$instruction['content'];
 
         return $fileName.'?x-oss-process=image/'.$instr_name.','.$type.'_'.$instruction['content'].',type_'.$instruction['font']
