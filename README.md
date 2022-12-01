@@ -20,15 +20,15 @@ $ composer require inspur/php-oss-sdk
 ### 上传
 
 ```php
-use Obs\ObsClient;
+use OSS\OSSClient;
 ...
 $ak = '*** Provide your Access Key ***';
 $sk = '*** Provide your Secret Key ***';
 $endpoint = 'https://your-endpoint:443';
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
-$objectKey = 'my-obs-object-key-demo';
-$obsClient = ObsClient::factory ([
+$objectKey = 'my-OSS-object-key-demo';
+$OSSClient = OSSClient::factory ([
     'key' => $ak,
     'secret' => $sk,
     'endpoint' => $endpoint,
@@ -38,13 +38,13 @@ $obsClient = ObsClient::factory ([
 
 $metadata['meta1'] = 'value1';
 $metadata['meta2'] = 'value2';
-$obsClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' => $content, 'Metadata' => $metadata]);
+$OSSClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' => $content, 'Metadata' => $metadata]);
 ...
 ### 图片旋转
 参数说明： value顺时针旋转度数 ，度数为整数类型，取值为 0到359。
 - 代码示例：
 ...
- $obsClient -> rotateOperation([
+ $OSSClient -> rotateOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -57,7 +57,7 @@ $obsClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' =>
 参数说明： value顺时针旋转度数 ，度数为整数类型，取值为 0到359。
 - 代码示例：
 ...
- $obsClient -> flipOperation([
+ $OSSClient -> flipOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -84,7 +84,7 @@ value: 等比例缩放百分比值 0-100
 
 - 代码示例：
 ...
-    $obsClient -> resizeOperation([
+    $OSSClient -> resizeOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -104,7 +104,7 @@ saveArea: 默认为0，指定选择剪切后返回的图片区域，默认为0�
 
 - 代码示例：
 ...
-    $obsClient -> indexcropOperation([
+    $OSSClient -> indexcropOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -123,7 +123,7 @@ radus:裁剪半径
 
 - 代码示例：
 ...
-    $obsClient -> circleOperation([
+    $OSSClient -> circleOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -140,7 +140,7 @@ radus:矩形四角圆角的半径
 
 - 代码示例：
 ...
-    $obsClient -> roundedCornersOperation([
+    $OSSClient -> roundedCornersOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -156,7 +156,7 @@ file:需要处理的文件全路径名称
 
 - 代码示例：
 ...
-     $obsClient -> getInfoOperation([
+     $OSSClient -> getInfoOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
         ]
@@ -169,7 +169,7 @@ file:需要处理的文件全路径名称
 
 - 代码示例：
 ...
-     $obsClient -> averageHueOperation([
+     $OSSClient -> averageHueOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
         ]
@@ -182,7 +182,7 @@ file:需要处理的文件全路径名称
 type:可选参数 jpg、jpeg、png、bmp、gif、tiff
 - 代码示例：
 ...
-    $obsClient -> formatConversionOperation([
+    $OSSClient -> formatConversionOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -203,7 +203,7 @@ color:字体颜色
 position: 水印位置  可选值tl，top，tr，left，center，right，bl，bottom，br
 - 代码示例：
 ...
-   $obsClient -> watermarkOperation([
+   $OSSClient -> watermarkOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -227,7 +227,7 @@ type:可选参数 text,image
 content: 文字【文字水印不允许超过16个字符】，图片内容 【图片内容为路径格式：桶名/文件名】
 - 代码示例：
 ...
-         $obsClient->blindWatermarkOperation([
+         $OSSClient->blindWatermarkOperation([
             'body' => [
                 'file' => $filePath,
                 'instruction' => [
@@ -271,10 +271,10 @@ instructions:指令名称集合 可选参数：,format-conversion,rotate，flip�
       rounded-corners:
             radus:radus:矩形四角圆角的半径
       
-### 图片分片上传示例
+### 图片管道处理示例
 - 代码示例：
 ...
-         $obsClient -> pannelMogrOperation([
+         $OSSClient -> pannelMogrOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instructions'=>[
@@ -311,19 +311,22 @@ instructions:指令名称集合 可选参数：,format-conversion,rotate，flip�
     ]);
 ...
 
-
+###文件分段上传示例
+通过OSSClient->initiateMultipartUpload初始化一个分段上传任务
+通过OSSClient->uploadPart上传段
+通过OSSClient->completeMultipartUpload合并段
 - 代码示例：
 ...
 /*
 	 * Create bucket
 	 */
 	printf("Create a new bucket for demo\n\n");
-	$obsClient -> createBucket(['Bucket' => $bucketName]);
+	$OSSClient -> createBucket(['Bucket' => $bucketName]);
 	
 	/*
 	 * Claim a upload id firstly
 	 */
-	$resp = $obsClient -> initiateMultipartUpload(['Bucket' => $bucketName, 'Key' => $objectKey]);
+	$resp = $OSSClient -> initiateMultipartUpload(['Bucket' => $bucketName, 'Key' => $objectKey]);
 	
 	$uploadId = $resp['UploadId'];
 	printf("Claiming a new upload id %s\n\n", $uploadId);
@@ -347,12 +350,12 @@ instructions:指令名称集合 可选参数：,format-conversion,rotate，flip�
 	/*
 	 * Upload multiparts to your bucket
 	 */
-	printf("Begin to upload multiparts to OBS from a file\n\n");
+	printf("Begin to upload multiparts to OSS from a file\n\n");
 	for($i = 0; $i < $partCount; $i++){
 		$offset = $i * $partSize;
 		$currPartSize = ($i + 1 === $partCount) ? $fileLength - $offset : $partSize;
 		$partNumber = $i + 1;
-		$p = $obsClient -> uploadPartAsync([
+		$p = $OSSClient -> uploadPartAsync([
 				'Bucket' => $bucketName, 
 				'Key' => $objectKey, 
 				'UploadId' => $uploadId, 
@@ -396,7 +399,7 @@ instructions:指令名称集合 可选参数：,format-conversion,rotate，flip�
 	 * View all parts uploaded recently
 	 */
 	printf("Listing all parts......\n");
-	$resp = $obsClient -> listParts(['Bucket' => $bucketName, 'Key' => $objectKey, 'UploadId' => $uploadId]);
+	$resp = $OSSClient -> listParts(['Bucket' => $bucketName, 'Key' => $objectKey, 'UploadId' => $uploadId]);
 	foreach ($resp['Parts'] as $part)
 	{
 		printf("\tPart#%d, ETag=%s\n", $part['PartNumber'], $part['ETag']);
@@ -407,7 +410,7 @@ instructions:指令名称集合 可选参数：,format-conversion,rotate，flip�
 	/*
 	 * Complete to upload multiparts
 	 */
-	$resp = $obsClient->completeMultipartUpload([
+	$resp = $OSSClient->completeMultipartUpload([
 			'Bucket' => $bucketName,
 			'Key' => $objectKey,
 			'UploadId' => $uploadId,
@@ -424,7 +427,7 @@ file:待处理的文件名 图片格式支持： JPEG、PNG
 type:压缩类型 可选参数：avif,heif
 - 代码示例：
 ...
- $obsClient -> formatConversionOperation([
+ $OSSClient -> formatConversionOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
