@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright 2022 InspurCloud Technologies Co.,Ltd.
+ * Copyright 2019 Huawei Technologies Co.,Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use
  * this file except in compliance with the License.  You may obtain a copy of the
  * License at
@@ -17,8 +17,7 @@
 
 namespace OSS\Internal\Resource;
 
-class OSSRequestResource
-{
+class OSSRequestResource {
     public static $RESOURCE_ARRAY = [
         'operations' => [
             'createBucket' => [
@@ -2849,13 +2848,9 @@ class OSSRequestResource
                         'location' => 'dns'
                     ],
                     'Key' => [
-                        'required' => false,
+                        'required' => true,
                         'type' => 'string',
                         'location' => 'uri'
-                    ],
-                    'random-object-name' => [
-                        'type' => 'bool',
-                        'location' => 'dns'
                     ],
                     'ContentMD5' => [
                         'type' => 'string',
@@ -2914,1265 +2909,1294 @@ class OSSRequestResource
                         'sentAs' => 'x-OSS-expires'
                     ]
                 ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'ETag' => [
+                            'type' => 'string',
+                            'location' => 'header'
+                        ],
+                        'VersionId' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-version-id'
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ],
+                        'StorageClass' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-storage-class'
+                        ],
+                        'SseKms' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption'
+                        ],
+                        'SseKmsKey' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                        ],
+                        'SseC' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                        ],
+                        'SseCKeyMd5' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
+                        ]
+                    ]
+                ]
+            ],
 
+            'getObject' => [
+                'httpMethod' => 'GET',
+                'stream' => true,
+                'requestParameters' => [
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'IfMatch' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'If-Match'
+                    ],
+                    'IfModifiedSince' => [
+                        'type' => 'string',
+                        'format' => 'date-time-http',
+                        'location' => 'header',
+                        'sentAs' => 'If-Modified-Since'
+                    ],
+                    'IfNoneMatch' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'If-None-Match'
+                    ],
+                    'IfUnmodifiedSince' => [
+                        'type' => 'string',
+                        'format' => 'date-time-http',
+                        'location' => 'header',
+                        'sentAs' => 'If-Unmodified-Since'
+                    ],
+                    'Key' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'uri'
+                    ],
+                    'Range' => [
+                        'type' => 'string',
+                        'location' => 'header'
+                    ],
+                    'ImageProcess' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'x-image-process'
+                    ],
+                    'ResponseCacheControl' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'response-cache-control'
+                    ],
+                    'ResponseContentDisposition' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'response-content-disposition'
+                    ],
+                    'ResponseContentEncoding' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'response-content-encoding'
+                    ],
+                    'ResponseContentLanguage' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'response-content-language'
+                    ],
+                    'ResponseContentType' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'response-content-type'
+                    ],
+                    'ResponseExpires' => [
+                        'type' => 'string',
+                        'format' => 'date-time-http',
+                        'location' => 'query',
+                        'sentAs' => 'response-expires'
+                    ],
+                    'VersionId' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'versionId'
+                    ],
+                    'SaveAsFile' => [
+                        'type' => 'file',
+                        'location' => 'response'
+                    ],
+                    'FilePath' => [
+                        'type' => 'file',
+                        'location' => 'response'
+                    ],
+
+                    'Origin' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'Origin'
+                    ],
+                    'RequestHeader' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'Access-Control-Request-Headers'
+                    ],
+                    'SseC' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                    ],
+                    'SseCKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-key',
+                        'type' => 'password'
+                    ]
+                ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'Body' => [
+                            'type' => 'stream',
+                            'location' => 'body'
+                        ],
+                        'DeleteMarker' => [
+                            'type' => 'boolean',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-delete-marker'
+                        ],
+                        'Expiration' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-expiration'
+                        ],
+                        'LastModified' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'last-modified'
+                        ],
+                        'ContentLength' => [
+                            'type' => 'integer',
+                            'location' => 'header',
+                            'sentAs' => 'content-length'
+                        ],
+                        'ETag' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'etag'
+                        ],
+                        'VersionId' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-version-id'
+                        ],
+                        'CacheControl' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'cache-control'
+                        ],
+                        'ContentDisposition' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'content-disposition'
+                        ],
+                        'ContentEncoding' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'content-encoding'
+                        ],
+                        'ContentLanguage' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'content-language'
+                        ],
+                        'ContentType' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'content-type'
+                        ],
+                        'Expires' => [
+                            'type' => 'string',
+                            'location' => 'header'
+                        ],
+                        'WebsiteRedirectLocation' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-website-redirect-location'
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ],
+                        'StorageClass' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-storage-class'
+                        ],
+                        'Restore' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-restore'
+                        ],
+                        'AllowOrigin' => [
+                            'location' => 'header',
+                            'sentAs' => 'access-control-allow-origin'
+                        ],
+                        'MaxAgeSeconds' => [
+                            'location' => 'header',
+                            'sentAs' => 'access-control-max-age'
+                        ],
+                        'ExposeHeader' => [
+                            'location' => 'header',
+                            'sentAs' => 'access-control-expose-headers'
+                        ],
+                        'AllowMethod' => [
+                            'location' => 'header',
+                            'sentAs' => 'access-control-allow-methods'
+                        ],
+                        'AllowHeader' => [
+                            'location' => 'header',
+                            'sentAs' => 'access-control-allow-headers'
+                        ],
+                        'SseKms' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption'
+                        ],
+                        'SseKmsKey' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                        ],
+                        'SseC' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                        ],
+                        'SseCKeyMd5' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
+                        ],
+                        'Metadata' => [
+                            'location' => 'header',
+                            'type' => 'object',
+                            'sentAs' => 'x-OSS-meta-'
+                        ],
+                        'ObjectType' => [
+                            'location' => 'header',
+                            'type' => 'string',
+                            'sentAs' => 'x-OSS-object-type'
+                        ],
+                        'AppendPosition' => [
+                            'location' => 'header',
+                            'type' => 'string',
+                            'sentAs' => 'x-OSS-next-append-position'
+                        ]
+                    ]
+                ]
+            ],
+
+            'copyObject' => [
+                'httpMethod' => 'PUT',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'StorageClass' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-storage-class',
+                        'transform' => 'storageClass'
+                    ],
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'Key' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'uri'
+                    ],
+                    'CopySource' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source'
+                    ],
+                    'CopySourceIfMatch' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source-if-match'
+                    ],
+                    'CopySourceIfModifiedSince' => [
+                        'type' => 'string',
+                        'format' => 'date-time-http',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source-if-modified-since'
+                    ],
+                    'CopySourceIfNoneMatch' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source-if-none-match'
+                    ],
+                    'CopySourceIfUnmodifiedSince' => [
+                        'type' => 'string',
+                        'format' => 'date-time-http',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source-if-unmodified-since'
+                    ],
+                    'MetadataDirective' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-metadata-directive'
+                    ],
+                    'ContentType' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'content-type'
+                    ],
+                    'ContentEncoding' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'content-encoding'
+                    ],
+                    'ContentLanguage' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'content-language'
+                    ],
+                    'ContentDisposition' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'content-disposition'
+                    ],
+                    'CacheControl' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'cache-control'
+                    ],
+                    'Expires' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'expires'
+                    ],
+                    'Metadata' => [
+                        'type' => 'object',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-meta-'
+                    ],
+                    'WebsiteRedirectLocation' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-website-redirect-location'
+                    ],
+                    'SseKms' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption'
+                    ],
+                    'SseKmsKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                    ],
+                    'SseC' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                    ],
+                    'SseCKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-key',
+                        'type' => 'password'
+                    ],
+                    'CopySourceSseC' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-algorithm'
+                    ],
+                    'CopySourceSseCKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-key',
+                        'type' => 'password'
+                    ]
+                ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'ETag' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'LastModified' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'VersionId' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-version-id'
+                        ],
+                        'CopySourceVersionId' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-copy-source-version-id'
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ],
+                        'SseKms' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption'
+                        ],
+                        'SseKmsKey' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                        ],
+                        'SseC' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                        ],
+                        'SseCKeyMd5' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
+                        ]
+                    ]
+                ]
+            ],
+
+            'getObjectMetadata' => [
+                'httpMethod' => 'HEAD',
+                'requestParameters' => [
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'Key' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'uri'
+                    ],
+                    'VersionId' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'versionId'
+                    ],
+                    'Origin' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'Origin'
+                    ],
+                    'RequestHeader' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'Access-Control-Request-Headers'
+                    ],
+                    'SseC' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                    ],
+                    'SseCKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-key',
+                        'type' => 'password'
+                    ]
+                ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'Expiration' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-expiration'
+                        ],
+                        'LastModified' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'last-modified'
+                        ],
+                        'ContentLength' => [
+                            'type' => 'integer',
+                            'location' => 'header',
+                            'sentAs' => 'content-length'
+                        ],
+                        'ContentType' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'content-type'
+                        ],
+                        'ETag' => [
+                            'type' => 'string',
+                            'location' => 'header'
+                        ],
+                        'VersionId' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-version-id'
+                        ],
+                        'WebsiteRedirectLocation' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-website-redirect-location'
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ],
+                        'StorageClass' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-storage-class'
+                        ],
+                        'AllowOrigin' => [
+                            'location' => 'header',
+                            'sentAs' => 'access-control-allow-origin'
+                        ],
+                        'MaxAgeSeconds' => [
+                            'type' => 'integer',
+                            'location' => 'header',
+                            'sentAs' => 'access-control-max-age'
+                        ],
+                        'ExposeHeader' => [
+                            'location' => 'header',
+                            'sentAs' => 'access-control-expose-headers'
+                        ],
+                        'AllowMethod' => [
+                            'location' => 'header',
+                            'sentAs' => 'access-control-allow-methods'
+                        ],
+                        'AllowHeader' => [
+                            'location' => 'header',
+                            'sentAs' => 'access-control-allow-headers'
+                        ],
+                        'Restore' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-restore'
+                        ],
+                        'SseKms' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption'
+                        ],
+                        'SseKmsKey' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                        ],
+                        'SseC' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                        ],
+                        'SseCKeyMd5' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
+                        ],
+                        'Metadata' => [
+                            'location' => 'header',
+                            'type' => 'object',
+                            'sentAs' => 'x-OSS-meta-'
+                        ],
+                        'ObjectType' => [
+                            'location' => 'header',
+                            'type' => 'string',
+                            'sentAs' => 'x-OSS-object-type'
+                        ],
+                        'AppendPosition' => [
+                            'location' => 'header',
+                            'type' => 'string',
+                            'sentAs' => 'x-OSS-next-append-position'
+                        ]
+                    ]
+                ]
+            ],
+
+            'initiateMultipartUpload' => [
+                'httpMethod' => 'POST',
+                'specialParam' => 'uploads',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'StorageClass' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-storage-class',
+                        'transform' => 'storageClass'
+                    ],
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'ContentType' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'Content-Type'
+                    ],
+                    'Key' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'uri'
+                    ],
+                    'Metadata' => [
+                        'type' => 'object',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-meta-'
+                    ],
+                    'WebsiteRedirectLocation' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-website-redirect-location'
+                    ],
+                    'SseKms' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption'
+                    ],
+                    'SseKmsKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                    ],
+                    'SseC' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                    ],
+                    'SseCKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-key',
+                        'type' => 'password'
+                    ],
+                    'Expires' => [
+                        'location' => 'header',
+                        'type' => 'string',
+                        'sentAs' => 'x-OSS-expires'
+                    ]
+                ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'Bucket' => [
+                            'type' => 'string',
+                            'location' => 'xml',
+                            'sentAs' => 'Bucket'
+                        ],
+                        'Key' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'UploadId' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ],
+                        'SseKms' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption'
+                        ],
+                        'SseKmsKey' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                        ],
+                        'SseC' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                        ],
+                        'SseCKeyMd5' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
+                        ]
+                    ]
+                ]
+            ],
+
+            'listMultipartUploads' => [
+                'httpMethod' => 'GET',
+                'specialParam' => 'uploads',
+                'requestParameters' => [
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'Delimiter' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'delimiter'
+                    ],
+                    'KeyMarker' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'key-marker'
+                    ],
+                    'MaxUploads' => [
+                        'type' => 'numeric',
+                        'location' => 'query',
+                        'sentAs' => 'max-uploads'
+                    ],
+                    'Prefix' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'prefix'
+                    ],
+                    'UploadIdMarker' => [
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'upload-id-marker'
+                    ]
+                ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'Bucket' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'KeyMarker' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'UploadIdMarker' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'NextKeyMarker' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'Prefix' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'Delimiter' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'NextUploadIdMarker' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'MaxUploads' => [
+                            'type' => 'numeric',
+                            'location' => 'xml'
+                        ],
+                        'IsTruncated' => [
+                            'type' => 'boolean',
+                            'location' => 'xml'
+                        ],
+                        'Uploads' => [
+                            'type' => 'array',
+                            'location' => 'xml',
+                            'sentAs' => 'Upload',
+                            'data' => [
+                                'xmlFlattened' => true
+                            ],
+                            'items' => [
+                                'name' => 'MultipartUpload',
+                                'type' => 'object',
+                                'sentAs' => 'Upload',
+                                'properties' => [
+                                    'UploadId' => [
+                                        'type' => 'string'
+                                    ],
+                                    'Key' => [
+                                        'type' => 'string'
+                                    ],
+                                    'Initiated' => [
+                                        'type' => 'string'
+                                    ],
+                                    'StorageClass' => [
+                                        'type' => 'string'
+                                    ],
+                                    'Owner' => [
+                                        'type' => 'object',
+                                        'properties' => [
+                                            'ID' => [
+                                                'type' => 'string'
+                                            ]
+                                        ]
+                                    ],
+                                    'Initiator' => [
+                                        'type' => 'object',
+                                        'properties' => [
+                                            'ID' => [
+                                                'type' => 'string'
+                                            ]
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'CommonPrefixes' => [
+                            'type' => 'array',
+                            'location' => 'xml',
+                            'data' => [
+                                'xmlFlattened' => true
+                            ],
+                            'items' => [
+                                'name' => 'CommonPrefix',
+                                'type' => 'object',
+                                'properties' => [
+                                    'Prefix' => [
+                                        'type' => 'string'
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ]
+                    ]
+                ]
+            ],
+
+            'abortMultipartUpload' => [
+                'httpMethod' => 'DELETE',
+                'requestParameters' => [
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'Key' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'uri'
+                    ],
+                    'UploadId' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'uploadId'
+                    ]
+                ],
                 'responseParameters' => [
                     'type' => 'object',
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
                             'sentAs' => 'x-OSS-request-id'
-                        ],
-
-                    ],
-
-                    'getObject' => [
-                        'httpMethod' => 'GET',
-                        'stream' => true,
-                        'requestParameters' => [
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'IfMatch' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'If-Match'
-                            ],
-                            'IfModifiedSince' => [
-                                'type' => 'string',
-                                'format' => 'date-time-http',
-                                'location' => 'header',
-                                'sentAs' => 'If-Modified-Since'
-                            ],
-                            'IfNoneMatch' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'If-None-Match'
-                            ],
-                            'IfUnmodifiedSince' => [
-                                'type' => 'string',
-                                'format' => 'date-time-http',
-                                'location' => 'header',
-                                'sentAs' => 'If-Unmodified-Since'
-                            ],
-                            'Key' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'uri'
-                            ],
-                            'Range' => [
-                                'type' => 'string',
-                                'location' => 'header'
-                            ],
-                            'ImageProcess' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'x-image-process'
-                            ],
-                            'ResponseCacheControl' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'response-cache-control'
-                            ],
-                            'ResponseContentDisposition' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'response-content-disposition'
-                            ],
-                            'ResponseContentEncoding' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'response-content-encoding'
-                            ],
-                            'ResponseContentLanguage' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'response-content-language'
-                            ],
-                            'ResponseContentType' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'response-content-type'
-                            ],
-                            'ResponseExpires' => [
-                                'type' => 'string',
-                                'format' => 'date-time-http',
-                                'location' => 'query',
-                                'sentAs' => 'response-expires'
-                            ],
-                            'VersionId' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'versionId'
-                            ],
-                            'SaveAsFile' => [
-                                'type' => 'file',
-                                'location' => 'response'
-                            ],
-                            'FilePath' => [
-                                'type' => 'file',
-                                'location' => 'response'
-                            ],
-
-                            'Origin' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'Origin'
-                            ],
-                            'RequestHeader' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'Access-Control-Request-Headers'
-                            ],
-                            'SseC' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                            ],
-                            'SseCKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
-                                'type' => 'password'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'Body' => [
-                                    'type' => 'stream',
-                                    'location' => 'body'
-                                ],
-                                'DeleteMarker' => [
-                                    'type' => 'boolean',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-delete-marker'
-                                ],
-                                'Expiration' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-expiration'
-                                ],
-                                'LastModified' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'last-modified'
-                                ],
-                                'ContentLength' => [
-                                    'type' => 'integer',
-                                    'location' => 'header',
-                                    'sentAs' => 'content-length'
-                                ],
-                                'ETag' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'etag'
-                                ],
-                                'VersionId' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-version-id'
-                                ],
-                                'CacheControl' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'cache-control'
-                                ],
-                                'ContentDisposition' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'content-disposition'
-                                ],
-                                'ContentEncoding' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'content-encoding'
-                                ],
-                                'ContentLanguage' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'content-language'
-                                ],
-                                'ContentType' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'content-type'
-                                ],
-                                'Expires' => [
-                                    'type' => 'string',
-                                    'location' => 'header'
-                                ],
-                                'WebsiteRedirectLocation' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-website-redirect-location'
-                                ],
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ],
-                                'StorageClass' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-storage-class'
-                                ],
-                                'Restore' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-restore'
-                                ],
-                                'AllowOrigin' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-allow-origin'
-                                ],
-                                'MaxAgeSeconds' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-max-age'
-                                ],
-                                'ExposeHeader' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-expose-headers'
-                                ],
-                                'AllowMethod' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-allow-methods'
-                                ],
-                                'AllowHeader' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-allow-headers'
-                                ],
-                                'SseKms' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption'
-                                ],
-                                'SseKmsKey' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
-                                ],
-                                'SseC' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                                ],
-                                'SseCKeyMd5' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
-                                ],
-                                'Metadata' => [
-                                    'location' => 'header',
-                                    'type' => 'object',
-                                    'sentAs' => 'x-OSS-meta-'
-                                ],
-                                'ObjectType' => [
-                                    'location' => 'header',
-                                    'type' => 'string',
-                                    'sentAs' => 'x-OSS-object-type'
-                                ],
-                                'AppendPosition' => [
-                                    'location' => 'header',
-                                    'type' => 'string',
-                                    'sentAs' => 'x-OSS-next-append-position'
-                                ]
-                            ]
-                        ]
-                    ],
-
-                    'copyObject' => [
-                        'httpMethod' => 'PUT',
-                        'requestParameters' => [
-                            'ACL' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-acl',
-                                'transform' => 'aclHeader'
-                            ],
-                            'StorageClass' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-storage-class',
-                                'transform' => 'storageClass'
-                            ],
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'Key' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'uri'
-                            ],
-                            'CopySource' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source'
-                            ],
-                            'CopySourceIfMatch' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source-if-match'
-                            ],
-                            'CopySourceIfModifiedSince' => [
-                                'type' => 'string',
-                                'format' => 'date-time-http',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source-if-modified-since'
-                            ],
-                            'CopySourceIfNoneMatch' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source-if-none-match'
-                            ],
-                            'CopySourceIfUnmodifiedSince' => [
-                                'type' => 'string',
-                                'format' => 'date-time-http',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source-if-unmodified-since'
-                            ],
-                            'MetadataDirective' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-metadata-directive'
-                            ],
-                            'ContentType' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'content-type'
-                            ],
-                            'ContentEncoding' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'content-encoding'
-                            ],
-                            'ContentLanguage' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'content-language'
-                            ],
-                            'ContentDisposition' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'content-disposition'
-                            ],
-                            'CacheControl' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'cache-control'
-                            ],
-                            'Expires' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'expires'
-                            ],
-                            'Metadata' => [
-                                'type' => 'object',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-meta-'
-                            ],
-                            'WebsiteRedirectLocation' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-website-redirect-location'
-                            ],
-                            'SseKms' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption'
-                            ],
-                            'SseKmsKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
-                            ],
-                            'SseC' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                            ],
-                            'SseCKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
-                                'type' => 'password'
-                            ],
-                            'CopySourceSseC' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-algorithm'
-                            ],
-                            'CopySourceSseCKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-key',
-                                'type' => 'password'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'ETag' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'LastModified' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'VersionId' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-version-id'
-                                ],
-                                'CopySourceVersionId' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-copy-source-version-id'
-                                ],
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ],
-                                'SseKms' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption'
-                                ],
-                                'SseKmsKey' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
-                                ],
-                                'SseC' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                                ],
-                                'SseCKeyMd5' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
-                                ]
-                            ]
-                        ]
-                    ],
-
-                    'getObjectMetadata' => [
-                        'httpMethod' => 'HEAD',
-                        'requestParameters' => [
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'Key' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'uri'
-                            ],
-                            'VersionId' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'versionId'
-                            ],
-                            'Origin' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'Origin'
-                            ],
-                            'RequestHeader' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'Access-Control-Request-Headers'
-                            ],
-                            'SseC' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                            ],
-                            'SseCKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
-                                'type' => 'password'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'Expiration' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-expiration'
-                                ],
-                                'LastModified' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'last-modified'
-                                ],
-                                'ContentLength' => [
-                                    'type' => 'integer',
-                                    'location' => 'header',
-                                    'sentAs' => 'content-length'
-                                ],
-                                'ContentType' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'content-type'
-                                ],
-                                'ETag' => [
-                                    'type' => 'string',
-                                    'location' => 'header'
-                                ],
-                                'VersionId' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-version-id'
-                                ],
-                                'WebsiteRedirectLocation' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-website-redirect-location'
-                                ],
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ],
-                                'StorageClass' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-storage-class'
-                                ],
-                                'AllowOrigin' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-allow-origin'
-                                ],
-                                'MaxAgeSeconds' => [
-                                    'type' => 'integer',
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-max-age'
-                                ],
-                                'ExposeHeader' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-expose-headers'
-                                ],
-                                'AllowMethod' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-allow-methods'
-                                ],
-                                'AllowHeader' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'access-control-allow-headers'
-                                ],
-                                'Restore' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-restore'
-                                ],
-                                'SseKms' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption'
-                                ],
-                                'SseKmsKey' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
-                                ],
-                                'SseC' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                                ],
-                                'SseCKeyMd5' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
-                                ],
-                                'Metadata' => [
-                                    'location' => 'header',
-                                    'type' => 'object',
-                                    'sentAs' => 'x-OSS-meta-'
-                                ],
-                                'ObjectType' => [
-                                    'location' => 'header',
-                                    'type' => 'string',
-                                    'sentAs' => 'x-OSS-object-type'
-                                ],
-                                'AppendPosition' => [
-                                    'location' => 'header',
-                                    'type' => 'string',
-                                    'sentAs' => 'x-OSS-next-append-position'
-                                ]
-                            ]
-                        ]
-                    ],
-
-                    'initiateMultipartUpload' => [
-                        'httpMethod' => 'POST',
-                        'specialParam' => 'uploads',
-                        'requestParameters' => [
-                            'ACL' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-acl',
-                                'transform' => 'aclHeader'
-                            ],
-                            'StorageClass' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-storage-class',
-                                'transform' => 'storageClass'
-                            ],
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'ContentType' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'Content-Type'
-                            ],
-                            'Key' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'uri'
-                            ],
-                            'Metadata' => [
-                                'type' => 'object',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-meta-'
-                            ],
-                            'WebsiteRedirectLocation' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-website-redirect-location'
-                            ],
-                            'SseKms' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption'
-                            ],
-                            'SseKmsKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
-                            ],
-                            'SseC' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                            ],
-                            'SseCKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
-                                'type' => 'password'
-                            ],
-                            'Expires' => [
-                                'location' => 'header',
-                                'type' => 'string',
-                                'sentAs' => 'x-OSS-expires'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'Bucket' => [
-                                    'type' => 'string',
-                                    'location' => 'xml',
-                                    'sentAs' => 'Bucket'
-                                ],
-                                'Key' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'UploadId' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ],
-                                'SseKms' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption'
-                                ],
-                                'SseKmsKey' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
-                                ],
-                                'SseC' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                                ],
-                                'SseCKeyMd5' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
-                                ]
-                            ]
-                        ]
-                    ],
-
-                    'listMultipartUploads' => [
-                        'httpMethod' => 'GET',
-                        'specialParam' => 'uploads',
-                        'requestParameters' => [
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'Delimiter' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'delimiter'
-                            ],
-                            'KeyMarker' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'key-marker'
-                            ],
-                            'MaxUploads' => [
-                                'type' => 'numeric',
-                                'location' => 'query',
-                                'sentAs' => 'max-uploads'
-                            ],
-                            'Prefix' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'prefix'
-                            ],
-                            'UploadIdMarker' => [
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'upload-id-marker'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'Bucket' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'KeyMarker' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'UploadIdMarker' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'NextKeyMarker' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'Prefix' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'Delimiter' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'NextUploadIdMarker' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'MaxUploads' => [
-                                    'type' => 'numeric',
-                                    'location' => 'xml'
-                                ],
-                                'IsTruncated' => [
-                                    'type' => 'boolean',
-                                    'location' => 'xml'
-                                ],
-                                'Uploads' => [
-                                    'type' => 'array',
-                                    'location' => 'xml',
-                                    'sentAs' => 'Upload',
-                                    'data' => [
-                                        'xmlFlattened' => true
-                                    ],
-                                    'items' => [
-                                        'name' => 'MultipartUpload',
-                                        'type' => 'object',
-                                        'sentAs' => 'Upload',
-                                        'properties' => [
-                                            'UploadId' => [
-                                                'type' => 'string'
-                                            ],
-                                            'Key' => [
-                                                'type' => 'string'
-                                            ],
-                                            'Initiated' => [
-                                                'type' => 'string'
-                                            ],
-                                            'StorageClass' => [
-                                                'type' => 'string'
-                                            ],
-                                            'Owner' => [
-                                                'type' => 'object',
-                                                'properties' => [
-                                                    'ID' => [
-                                                        'type' => 'string'
-                                                    ]
-                                                ]
-                                            ],
-                                            'Initiator' => [
-                                                'type' => 'object',
-                                                'properties' => [
-                                                    'ID' => [
-                                                        'type' => 'string'
-                                                    ]
-                                                ]
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'CommonPrefixes' => [
-                                    'type' => 'array',
-                                    'location' => 'xml',
-                                    'data' => [
-                                        'xmlFlattened' => true
-                                    ],
-                                    'items' => [
-                                        'name' => 'CommonPrefix',
-                                        'type' => 'object',
-                                        'properties' => [
-                                            'Prefix' => [
-                                                'type' => 'string'
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ]
-                            ]
-                        ]
-                    ],
-
-                    'abortMultipartUpload' => [
-                        'httpMethod' => 'DELETE',
-                        'requestParameters' => [
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'Key' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'uri'
-                            ],
-                            'UploadId' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'uploadId'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ]
-                            ]
-                        ]
-                    ],
-
-                    'uploadPart' => [
-                        'httpMethod' => 'PUT',
-                        'requestParameters' => [
-                            'Body' => [
-                                'type' => 'stream',
-                                'location' => 'body'
-                            ],
-                            'SourceFile' => [
-                                'type' => 'file',
-                                'location' => 'body'
-                            ],
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'Key' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'uri'
-                            ],
-                            'PartNumber' => [
-                                'required' => true,
-                                'type' => 'numeric',
-                                'location' => 'query',
-                                'sentAs' => 'partNumber'
-                            ],
-                            'UploadId' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'uploadId'
-                            ],
-                            'Offset' => [
-                                'type' => 'numeric',
-                                'location' => 'response'
-                            ],
-                            'PartSize' => [
-                                'type' => 'numeric',
-                                'location' => 'response'
-                            ],
-                            'ContentMD5' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'Content-MD5'
-                            ],
-                            'ContentType' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'Content-Type'
-                            ],
-                            'SseC' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                            ],
-                            'SseCKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
-                                'type' => 'password'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'ETag' => [
-                                    'type' => 'string',
-                                    'location' => 'header'
-                                ],
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ],
-                                'SseKms' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption'
-                                ],
-                                'SseKmsKey' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
-                                ],
-                                'SseC' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                                ],
-                                'SseCKeyMd5' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
-                                ]
-                            ]
-                        ]
-                    ],
-
-                    'completeMultipartUpload' => [
-                        'httpMethod' => 'POST',
-                        'data' => [
-                            'xmlRoot' => [
-                                'name' => 'CompleteMultipartUpload'
-                            ]
-                        ],
-                        'requestParameters' => [
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'Key' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'uri'
-                            ],
-                            'Parts' => [
-                                'type' => 'array',
-                                'location' => 'xml',
-                                'data' => [
-                                    'xmlFlattened' => true
-                                ],
-                                'items' => [
-                                    'name' => 'CompletedPart',
-                                    'type' => 'object',
-                                    'sentAs' => 'Part',
-                                    'properties' => [
-                                        'PartNumber' => [
-                                            'type' => 'numeric'
-                                        ],
-                                        'ETag' => [
-                                            'type' => 'string'
-                                        ]
-                                    ]
-                                ]
-                            ],
-                            'UploadId' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'uploadId'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'Location' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'Bucket' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'Key' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'Location' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'ETag' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'VersionId' => [
-                                    'type' => 'string',
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-version-id'
-                                ],
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ],
-                                'SseKms' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption'
-                                ],
-                                'SseKmsKey' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
-                                ],
-                                'SseC' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                                ],
-                                'SseCKeyMd5' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
-                                ]
-                            ]
-                        ]
-                    ],
-
-                    'listParts' => [
-                        'httpMethod' => 'GET',
-                        'requestParameters' => [
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'Key' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'uri'
-                            ],
-                            'MaxParts' => [
-                                'type' => 'numeric',
-                                'location' => 'query',
-                                'sentAs' => 'max-parts'
-                            ],
-                            'PartNumberMarker' => [
-                                'type' => 'numeric',
-                                'location' => 'query',
-                                'sentAs' => 'part-number-marker'
-                            ],
-                            'UploadId' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'uploadId'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'Bucket' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'Key' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'UploadId' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'PartNumberMarker' => [
-                                    'type' => 'numeric',
-                                    'location' => 'xml'
-                                ],
-                                'NextPartNumberMarker' => [
-                                    'type' => 'numeric',
-                                    'location' => 'xml'
-                                ],
-                                'MaxParts' => [
-                                    'type' => 'numeric',
-                                    'location' => 'xml'
-                                ],
-                                'IsTruncated' => [
-                                    'type' => 'boolean',
-                                    'location' => 'xml'
-                                ],
-                                'Parts' => [
-                                    'type' => 'array',
-                                    'location' => 'xml',
-                                    'sentAs' => 'Part',
-                                    'data' => [
-                                        'xmlFlattened' => true
-                                    ],
-                                    'items' => [
-                                        'name' => 'Part',
-                                        'type' => 'object',
-                                        'sentAs' => 'Part',
-                                        'properties' => [
-                                            'PartNumber' => [
-                                                'type' => 'integer'
-                                            ],
-                                            'LastModified' => [
-                                                'type' => 'string'
-                                            ],
-                                            'ETag' => [
-                                                'type' => 'string'
-                                            ],
-                                            'Size' => [
-                                                'type' => 'integer'
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'Initiator' => [
-                                    'type' => 'object',
-                                    'location' => 'xml',
-                                    'properties' => [
-                                        'ID' => [
-                                            'type' => 'string'
-                                        ]
-                                    ]
-                                ],
-                                'Owner' => [
-                                    'type' => 'object',
-                                    'location' => 'xml',
-                                    'properties' => [
-                                        'ID' => [
-                                            'type' => 'string'
-                                        ]
-                                    ]
-                                ],
-                                'StorageClass' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ]
-                            ]
-                        ]
-                    ],
-
-                    'copyPart' => [
-                        'httpMethod' => 'PUT',
-                        'requestParameters' => [
-                            'Bucket' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'dns'
-                            ],
-                            'CopySource' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source'
-                            ],
-                            'CopySourceRange' => [
-                                'type' => 'string',
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source-range'
-                            ],
-                            'Key' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'uri'
-                            ],
-                            'PartNumber' => [
-                                'required' => true,
-                                'type' => 'numeric',
-                                'location' => 'query',
-                                'sentAs' => 'partNumber'
-                            ],
-                            'UploadId' => [
-                                'required' => true,
-                                'type' => 'string',
-                                'location' => 'query',
-                                'sentAs' => 'uploadId'
-                            ],
-                            'SseC' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                            ],
-                            'SseCKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
-                                'type' => 'password'
-                            ],
-                            'CopySourceSseC' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-algorithm'
-                            ],
-                            'CopySourceSseCKey' => [
-                                'location' => 'header',
-                                'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-key',
-                                'type' => 'password'
-                            ]
-                        ],
-                        'responseParameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'ETag' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'LastModified' => [
-                                    'type' => 'string',
-                                    'location' => 'xml'
-                                ],
-                                'RequestId' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-request-id'
-                                ],
-                                'SseKms' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption'
-                                ],
-                                'SseKmsKey' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
-                                ],
-                                'SseC' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
-                                ],
-                                'SseCKeyMd5' => [
-                                    'location' => 'header',
-                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
-                                ]
-                            ]
                         ]
                     ]
-                ],
-
-                'aliases' => [
-                    'headBucket' => 'getBucketMetadata',
-
-                    'getBucketLogging' => 'getBucketLoggingConfiguration',
-                    'setBucketLogging' => 'setBucketLoggingConfiguration',
-                    'getBucketVersioning' => 'getBucketVersioningConfiguration',
-                    'setBucketVersioning' => 'setBucketVersioningConfiguration',
-                    'setBucketWebsite' => 'setBucketWebsiteConfiguration',
-                    'getBucketWebsite' => 'getBucketWebsiteConfiguration',
-                    'deleteBucketWebsite' => 'deleteBucketWebsiteConfiguration',
-                    'setBucketLifecycle' => 'setBucketLifecycleConfiguration',
-                    'getBucketLifecycle' => 'getBucketLifecycleConfiguration',
-                    'deleteBucketLifecycle' => 'deleteBucketLifecycleConfiguration'
                 ]
-            ];
+            ],
+
+            'uploadPart' => [
+                'httpMethod' => 'PUT',
+                'requestParameters' => [
+                    'Body' => [
+                        'type' => 'stream',
+                        'location' => 'body'
+                    ],
+                    'SourceFile' => [
+                        'type' => 'file',
+                        'location' => 'body'
+                    ],
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'Key' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'uri'
+                    ],
+                    'PartNumber' => [
+                        'required' => true,
+                        'type' => 'numeric',
+                        'location' => 'query',
+                        'sentAs' => 'partNumber'
+                    ],
+                    'UploadId' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'uploadId'
+                    ],
+                    'Offset' => [
+                        'type' => 'numeric',
+                        'location' => 'response'
+                    ],
+                    'PartSize' => [
+                        'type' => 'numeric',
+                        'location' => 'response'
+                    ],
+                    'ContentMD5' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'Content-MD5'
+                    ],
+                    'ContentType' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'Content-Type'
+                    ],
+                    'SseC' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                    ],
+                    'SseCKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-key',
+                        'type' => 'password'
+                    ]
+                ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'ETag' => [
+                            'type' => 'string',
+                            'location' => 'header'
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ],
+                        'SseKms' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption'
+                        ],
+                        'SseKmsKey' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                        ],
+                        'SseC' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                        ],
+                        'SseCKeyMd5' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
+                        ]
+                    ]
+                ]
+            ],
+
+            'completeMultipartUpload' => [
+                'httpMethod' => 'POST',
+                'data' => [
+                    'xmlRoot' => [
+                        'name' => 'CompleteMultipartUpload'
+                    ]
+                ],
+                'requestParameters' => [
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'Key' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'uri'
+                    ],
+                    'Parts' => [
+                        'type' => 'array',
+                        'location' => 'xml',
+                        'data' => [
+                            'xmlFlattened' => true
+                        ],
+                        'items' => [
+                            'name' => 'CompletedPart',
+                            'type' => 'object',
+                            'sentAs' => 'Part',
+                            'properties' => [
+                                'PartNumber' => [
+                                    'type' => 'numeric'
+                                ],
+                                'ETag' => [
+                                    'type' => 'string'
+                                ]
+                            ]
+                        ]
+                    ],
+                    'UploadId' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'uploadId'
+                    ]
+                ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'Location' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'Bucket' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'Key' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'Location' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'ETag' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'VersionId' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-version-id'
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ],
+                        'SseKms' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption'
+                        ],
+                        'SseKmsKey' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                        ],
+                        'SseC' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                        ],
+                        'SseCKeyMd5' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
+                        ]
+                    ]
+                ]
+            ],
+
+            'listParts' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'Key' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'uri'
+                    ],
+                    'MaxParts' => [
+                        'type' => 'numeric',
+                        'location' => 'query',
+                        'sentAs' => 'max-parts'
+                    ],
+                    'PartNumberMarker' => [
+                        'type' => 'numeric',
+                        'location' => 'query',
+                        'sentAs' => 'part-number-marker'
+                    ],
+                    'UploadId' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'uploadId'
+                    ]
+                ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'Bucket' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'Key' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'UploadId' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'PartNumberMarker' => [
+                            'type' => 'numeric',
+                            'location' => 'xml'
+                        ],
+                        'NextPartNumberMarker' => [
+                            'type' => 'numeric',
+                            'location' => 'xml'
+                        ],
+                        'MaxParts' => [
+                            'type' => 'numeric',
+                            'location' => 'xml'
+                        ],
+                        'IsTruncated' => [
+                            'type' => 'boolean',
+                            'location' => 'xml'
+                        ],
+                        'Parts' => [
+                            'type' => 'array',
+                            'location' => 'xml',
+                            'sentAs' => 'Part',
+                            'data' => [
+                                'xmlFlattened' => true
+                            ],
+                            'items' => [
+                                'name' => 'Part',
+                                'type' => 'object',
+                                'sentAs' => 'Part',
+                                'properties' => [
+                                    'PartNumber' => [
+                                        'type' => 'integer'
+                                    ],
+                                    'LastModified' => [
+                                        'type' => 'string'
+                                    ],
+                                    'ETag' => [
+                                        'type' => 'string'
+                                    ],
+                                    'Size' => [
+                                        'type' => 'integer'
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'Initiator' => [
+                            'type' => 'object',
+                            'location' => 'xml',
+                            'properties' => [
+                                'ID' => [
+                                    'type' => 'string'
+                                ]
+                            ]
+                        ],
+                        'Owner' => [
+                            'type' => 'object',
+                            'location' => 'xml',
+                            'properties' => [
+                                'ID' => [
+                                    'type' => 'string'
+                                ]
+                            ]
+                        ],
+                        'StorageClass' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ]
+                    ]
+                ]
+            ],
+
+            'copyPart' => [
+                'httpMethod' => 'PUT',
+                'requestParameters' => [
+                    'Bucket' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'dns'
+                    ],
+                    'CopySource' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source'
+                    ],
+                    'CopySourceRange' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source-range'
+                    ],
+                    'Key' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'uri'
+                    ],
+                    'PartNumber' => [
+                        'required' => true,
+                        'type' => 'numeric',
+                        'location' => 'query',
+                        'sentAs' => 'partNumber'
+                    ],
+                    'UploadId' => [
+                        'required' => true,
+                        'type' => 'string',
+                        'location' => 'query',
+                        'sentAs' => 'uploadId'
+                    ],
+                    'SseC' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                    ],
+                    'SseCKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-key',
+                        'type' => 'password'
+                    ],
+                    'CopySourceSseC' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-algorithm'
+                    ],
+                    'CopySourceSseCKey' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-key',
+                        'type' => 'password'
+                    ]
+                ],
+                'responseParameters' => [
+                    'type' => 'object',
+                    'properties' => [
+                        'ETag' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'LastModified' => [
+                            'type' => 'string',
+                            'location' => 'xml'
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-request-id'
+                        ],
+                        'SseKms' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption'
+                        ],
+                        'SseKmsKey' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
+                        ],
+                        'SseC' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
+                        ],
+                        'SseCKeyMd5' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
+                        ]
+                    ]
+                ]
+            ]
+        ],
+
+        'aliases' => [
+            'headBucket' => 'getBucketMetadata',
+
+            'getBucketLogging' => 'getBucketLoggingConfiguration',
+            'setBucketLogging' => 'setBucketLoggingConfiguration',
+            'getBucketVersioning' => 'getBucketVersioningConfiguration',
+            'setBucketVersioning' => 'setBucketVersioningConfiguration',
+            'setBucketWebsite' => 'setBucketWebsiteConfiguration',
+            'getBucketWebsite' => 'getBucketWebsiteConfiguration',
+            'deleteBucketWebsite' => 'deleteBucketWebsiteConfiguration',
+            'setBucketLifecycle' => 'setBucketLifecycleConfiguration',
+            'getBucketLifecycle' => 'getBucketLifecycleConfiguration',
+            'deleteBucketLifecycle' => 'deleteBucketLifecycleConfiguration'
+        ]
+    ];
 }
