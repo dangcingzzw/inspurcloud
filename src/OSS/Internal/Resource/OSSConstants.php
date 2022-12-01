@@ -15,16 +15,21 @@
  *
  */
 
-namespace Obs\Internal\Process;
+namespace OSS\Internal\Resource;
 
-class Handler{
-    /**
-     * @param $action
-     * @param $params
-     * @return string
-     */
-    public static function create($action,$params) {
-        $class= "Obs\Internal\Process".'\\'.$action;
-        return (new $class())->main($params);
-    }
+class OSSConstants extends Constants {
+    const FLAG = 'OSS';
+    const METADATA_PREFIX = 'x-OSS-meta-';
+    const HEADER_PREFIX = 'x-OSS-';
+    const ALTERNATIVE_DATE_HEADER = 'x-OSS-date';
+    const SECURITY_TOKEN_HEAD = 'x-OSS-security-token';
+    const TEMPURL_AK_HEAD = 'AccessKeyId';
+    
+    const COMMON_HEADERS = [
+        'content-length' => 'ContentLength',
+        'date' => 'Date',
+        'x-OSS-request-id' => 'RequestId',
+        'x-OSS-id-2' => 'Id2',
+        'x-reserved' => 'Reserved'
+    ];
 }

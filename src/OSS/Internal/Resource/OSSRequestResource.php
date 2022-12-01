@@ -15,9 +15,9 @@
  *
  */
 
-namespace Obs\Internal\Resource;
+namespace OSS\Internal\Resource;
 
-class OBSRequestResource
+class OSSRequestResource
 {
     public static $RESOURCE_ARRAY = [
         'operations' => [
@@ -32,7 +32,7 @@ class OBSRequestResource
                     'ACL' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-acl',
+                        'sentAs' => 'x-OSS-acl',
                         'transform' => 'aclHeader'
                     ],
                     'Bucket' => [
@@ -48,7 +48,7 @@ class OBSRequestResource
                     'StorageClass' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-storage-class',
+                        'sentAs' => 'x-OSS-storage-class',
                         'transform' => 'storageClass'
                     ]
                 ],
@@ -59,7 +59,7 @@ class OBSRequestResource
                     ],
                     'RequestId' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-request-id'
+                        'sentAs' => 'x-OSS-request-id'
                     ]
                 ]
             ],
@@ -99,7 +99,7 @@ class OBSRequestResource
                     ],
                     'RequestId' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-request-id'
+                        'sentAs' => 'x-OSS-request-id'
                     ]
                 ]
             ],
@@ -118,7 +118,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -242,11 +242,11 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'Location' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-bucket-location'
+                            'sentAs' => 'x-OSS-bucket-location'
                         ]
                     ]
                 ]
@@ -426,11 +426,11 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'Location' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-bucket-location'
+                            'sentAs' => 'x-OSS-bucket-location'
                         ]
                     ]
                 ]
@@ -458,16 +458,16 @@ class OBSRequestResource
                 'responseParameters' => [
                     'RequestId' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-request-id'
+                        'sentAs' => 'x-OSS-request-id'
                     ],
                     'StorageClass' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-storage-class'
+                        'sentAs' => 'x-OSS-storage-class'
                     ],
 
                     'Location' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-bucket-location'
+                        'sentAs' => 'x-OSS-bucket-location'
                     ],
 
                     'AllowOrigin' => [
@@ -513,7 +513,7 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -543,7 +543,7 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -574,7 +574,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -600,7 +600,7 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -635,7 +635,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -660,7 +660,7 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -683,43 +683,43 @@ class OBSRequestResource
                     'ACL' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-acl',
+                        'sentAs' => 'x-OSS-acl',
                         'transform' => 'aclHeader'
                     ],
                     'GrantRead' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-read'
+                        'sentAs' => 'x-OSS-grant-read'
                     ],
                     'GrantWrite' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-write'
+                        'sentAs' => 'x-OSS-grant-write'
                     ],
                     'GrantReadAcp' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-read-acp'
+                        'sentAs' => 'x-OSS-grant-read-acp'
                     ],
                     'GrantWriteAcp' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-write-acp'
+                        'sentAs' => 'x-OSS-grant-write-acp'
                     ],
                     'GrantFullControl' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-full-control'
+                        'sentAs' => 'x-OSS-grant-full-control'
                     ],
                     'GrantDeliveryRead' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-read-delivered'
+                        'sentAs' => 'x-OSS-grant-read-delivered'
                     ],
                     'GrantDeliveryFullControl' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-full-control-delivered'
+                        'sentAs' => 'x-OSS-grant-full-control-delivered'
                     ],
                     'Owner' => [
                         'type' => 'object',
@@ -766,7 +766,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -787,7 +787,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'Owner' => [
                             'type' => 'object',
@@ -894,7 +894,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -957,7 +957,7 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -965,7 +965,7 @@ class OBSRequestResource
 
             'setFetchPolicy' => [
                 'httpMethod' => 'PUT',
-                'specialParam' => 'obsfetchpolicy',
+                'specialParam' => 'OSSfetchpolicy',
                 'requestParameters' => [
                     'Bucket' => [
                         'required' => true,
@@ -983,7 +983,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -991,7 +991,7 @@ class OBSRequestResource
 
             'getFetchPolicy' => [
                 'httpMethod' => 'GET',
-                'specialParam' => 'obsfetchpolicy',
+                'specialParam' => 'OSSfetchpolicy',
                 'requestParameters' => [
                     'Bucket' => [
                         'required' => true,
@@ -1008,7 +1008,7 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1016,7 +1016,7 @@ class OBSRequestResource
 
             'deleteFetchPolicy' => [
                 'httpMethod' => 'DELETE',
-                'specialParam' => 'obsfetchpolicy',
+                'specialParam' => 'OSSfetchpolicy',
                 'requestParameters' => [
                     'Bucket' => [
                         'required' => true,
@@ -1027,7 +1027,7 @@ class OBSRequestResource
                 'responseParameters' => [
                     'RequestId' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-request-id'
+                        'sentAs' => 'x-OSS-request-id'
                     ]
                 ]
             ],
@@ -1052,7 +1052,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1077,7 +1077,7 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1085,7 +1085,7 @@ class OBSRequestResource
 
             'setFetchJob' => [
                 'httpMethod' => 'PUT',
-                'specialParam' => 'obsfetchjob',
+                'specialParam' => 'OSSfetchjob',
                 'requestParameters' => [
                     'Bucket' => [
                         'required' => true,
@@ -1103,7 +1103,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'JobInfo' => [
                             'type' => 'string',
@@ -1115,7 +1115,7 @@ class OBSRequestResource
 
             'getFetchJob' => [
                 'httpMethod' => 'GET',
-                'specialParam' => 'obsfetchjob',
+                'specialParam' => 'OSSfetchjob',
                 'requestParameters' => [
                     'Bucket' => [
                         'required' => true,
@@ -1138,7 +1138,7 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1159,7 +1159,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1278,7 +1278,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1299,7 +1299,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'Rules' => [
                             'type' => 'array',
@@ -1405,7 +1405,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1506,7 +1506,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1527,7 +1527,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'RedirectAllRequestsTo' => [
                             'type' => 'object',
@@ -1620,7 +1620,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1650,7 +1650,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1671,7 +1671,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'Status' => [
                             'type' => 'string',
@@ -1765,7 +1765,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1786,7 +1786,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'CorsRules' => [
                             'type' => 'array',
@@ -1866,7 +1866,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1908,7 +1908,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'AllowOrigin' => [
                             'location' => 'header',
@@ -1976,7 +1976,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -1997,7 +1997,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'Tags' => [
                             'type' => 'array',
@@ -2035,7 +2035,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -2213,7 +2213,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -2234,7 +2234,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'TopicConfigurations' => [
                             'type' => 'array',
@@ -2431,7 +2431,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'AllowOrigin' => [
                             'location' => 'header',
@@ -2482,16 +2482,16 @@ class OBSRequestResource
                         'DeleteMarker' => [
                             'type' => 'boolean',
                             'location' => 'header',
-                            'sentAs' => 'x-obs-delete-marker'
+                            'sentAs' => 'x-OSS-delete-marker'
                         ],
                         'VersionId' => [
                             'type' => 'string',
                             'location' => 'header',
-                            'sentAs' => 'x-obs-version-id'
+                            'sentAs' => 'x-OSS-version-id'
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -2595,7 +2595,7 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ]
                     ]
                 ]
@@ -2628,33 +2628,33 @@ class OBSRequestResource
                     'ACL' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-acl',
+                        'sentAs' => 'x-OSS-acl',
                         'transform' => 'aclHeader'
                     ],
                     'GrantRead' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-read'
+                        'sentAs' => 'x-OSS-grant-read'
                     ],
                     'GrantWrite' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-write'
+                        'sentAs' => 'x-OSS-grant-write'
                     ],
                     'GrantReadAcp' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-read-acp'
+                        'sentAs' => 'x-OSS-grant-read-acp'
                     ],
                     'GrantWriteAcp' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-write-acp'
+                        'sentAs' => 'x-OSS-grant-write-acp'
                     ],
                     'GrantFullControl' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-grant-full-control'
+                        'sentAs' => 'x-OSS-grant-full-control'
                     ],
                     'Owner' => [
                         'type' => 'object',
@@ -2699,7 +2699,7 @@ class OBSRequestResource
                 'responseParameters' => [
                     'RequestId' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-request-id'
+                        'sentAs' => 'x-OSS-request-id'
                     ]
                 ]
             ],
@@ -2769,11 +2769,11 @@ class OBSRequestResource
                         ],
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
                         'VersionId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-version-id'
+                            'sentAs' => 'x-OSS-version-id'
                         ]
                     ]
                 ]
@@ -2819,7 +2819,7 @@ class OBSRequestResource
                 'responseParameters' => [
                     'RequestId' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-request-id'
+                        'sentAs' => 'x-OSS-request-id'
                     ]
                 ]
             ],
@@ -2830,13 +2830,13 @@ class OBSRequestResource
                     'ACL' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-acl',
+                        'sentAs' => 'x-OSS-acl',
                         'transform' => 'aclHeader'
                     ],
                     'StorageClass' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-storage-class',
+                        'sentAs' => 'x-OSS-storage-class',
                         'transform' => 'storageClass'
                     ],
                     'Body' => [
@@ -2875,7 +2875,7 @@ class OBSRequestResource
                     'Metadata' => [
                         'type' => 'object',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-meta-'
+                        'sentAs' => 'x-OSS-meta-'
                     ],
                     'SourceFile' => [
                         'type' => 'file',
@@ -2884,23 +2884,23 @@ class OBSRequestResource
                     'WebsiteRedirectLocation' => [
                         'type' => 'string',
                         'location' => 'header',
-                        'sentAs' => 'x-obs-website-redirect-location'
+                        'sentAs' => 'x-OSS-website-redirect-location'
                     ],
                     'SseKms' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-server-side-encryption'
+                        'sentAs' => 'x-OSS-server-side-encryption'
                     ],
                     'SseKmsKey' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                        'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                     ],
                     'SseC' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                     ],
                     'SseCKey' => [
                         'location' => 'header',
-                        'sentAs' => 'x-obs-server-side-encryption-customer-key',
+                        'sentAs' => 'x-OSS-server-side-encryption-customer-key',
                         'type' => 'password'
                     ],
                     'SuccessRedirect' => [
@@ -2911,7 +2911,7 @@ class OBSRequestResource
                     'Expires' => [
                         'location' => 'header',
                         'type' => 'string',
-                        'sentAs' => 'x-obs-expires'
+                        'sentAs' => 'x-OSS-expires'
                     ]
                 ],
 
@@ -2920,7 +2920,7 @@ class OBSRequestResource
                     'properties' => [
                         'RequestId' => [
                             'location' => 'header',
-                            'sentAs' => 'x-obs-request-id'
+                            'sentAs' => 'x-OSS-request-id'
                         ],
 
                     ],
@@ -3027,11 +3027,11 @@ class OBSRequestResource
                             ],
                             'SseC' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                             ],
                             'SseCKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-key',
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
                                 'type' => 'password'
                             ]
                         ],
@@ -3045,12 +3045,12 @@ class OBSRequestResource
                                 'DeleteMarker' => [
                                     'type' => 'boolean',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-delete-marker'
+                                    'sentAs' => 'x-OSS-delete-marker'
                                 ],
                                 'Expiration' => [
                                     'type' => 'string',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-expiration'
+                                    'sentAs' => 'x-OSS-expiration'
                                 ],
                                 'LastModified' => [
                                     'type' => 'string',
@@ -3070,7 +3070,7 @@ class OBSRequestResource
                                 'VersionId' => [
                                     'type' => 'string',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-version-id'
+                                    'sentAs' => 'x-OSS-version-id'
                                 ],
                                 'CacheControl' => [
                                     'type' => 'string',
@@ -3104,19 +3104,19 @@ class OBSRequestResource
                                 'WebsiteRedirectLocation' => [
                                     'type' => 'string',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-website-redirect-location'
+                                    'sentAs' => 'x-OSS-website-redirect-location'
                                 ],
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ],
                                 'StorageClass' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-storage-class'
+                                    'sentAs' => 'x-OSS-storage-class'
                                 ],
                                 'Restore' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-restore'
+                                    'sentAs' => 'x-OSS-restore'
                                 ],
                                 'AllowOrigin' => [
                                     'location' => 'header',
@@ -3140,34 +3140,34 @@ class OBSRequestResource
                                 ],
                                 'SseKms' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption'
+                                    'sentAs' => 'x-OSS-server-side-encryption'
                                 ],
                                 'SseKmsKey' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                                 ],
                                 'SseC' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                                 ],
                                 'SseCKeyMd5' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-key-MD5'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
                                 ],
                                 'Metadata' => [
                                     'location' => 'header',
                                     'type' => 'object',
-                                    'sentAs' => 'x-obs-meta-'
+                                    'sentAs' => 'x-OSS-meta-'
                                 ],
                                 'ObjectType' => [
                                     'location' => 'header',
                                     'type' => 'string',
-                                    'sentAs' => 'x-obs-object-type'
+                                    'sentAs' => 'x-OSS-object-type'
                                 ],
                                 'AppendPosition' => [
                                     'location' => 'header',
                                     'type' => 'string',
-                                    'sentAs' => 'x-obs-next-append-position'
+                                    'sentAs' => 'x-OSS-next-append-position'
                                 ]
                             ]
                         ]
@@ -3179,13 +3179,13 @@ class OBSRequestResource
                             'ACL' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-acl',
+                                'sentAs' => 'x-OSS-acl',
                                 'transform' => 'aclHeader'
                             ],
                             'StorageClass' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-storage-class',
+                                'sentAs' => 'x-OSS-storage-class',
                                 'transform' => 'storageClass'
                             ],
                             'Bucket' => [
@@ -3202,34 +3202,34 @@ class OBSRequestResource
                                 'required' => true,
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source'
+                                'sentAs' => 'x-OSS-copy-source'
                             ],
                             'CopySourceIfMatch' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source-if-match'
+                                'sentAs' => 'x-OSS-copy-source-if-match'
                             ],
                             'CopySourceIfModifiedSince' => [
                                 'type' => 'string',
                                 'format' => 'date-time-http',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source-if-modified-since'
+                                'sentAs' => 'x-OSS-copy-source-if-modified-since'
                             ],
                             'CopySourceIfNoneMatch' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source-if-none-match'
+                                'sentAs' => 'x-OSS-copy-source-if-none-match'
                             ],
                             'CopySourceIfUnmodifiedSince' => [
                                 'type' => 'string',
                                 'format' => 'date-time-http',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source-if-unmodified-since'
+                                'sentAs' => 'x-OSS-copy-source-if-unmodified-since'
                             ],
                             'MetadataDirective' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-metadata-directive'
+                                'sentAs' => 'x-OSS-metadata-directive'
                             ],
                             'ContentType' => [
                                 'type' => 'string',
@@ -3264,37 +3264,37 @@ class OBSRequestResource
                             'Metadata' => [
                                 'type' => 'object',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-meta-'
+                                'sentAs' => 'x-OSS-meta-'
                             ],
                             'WebsiteRedirectLocation' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-website-redirect-location'
+                                'sentAs' => 'x-OSS-website-redirect-location'
                             ],
                             'SseKms' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption'
+                                'sentAs' => 'x-OSS-server-side-encryption'
                             ],
                             'SseKmsKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                                'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                             ],
                             'SseC' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                             ],
                             'SseCKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-key',
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
                                 'type' => 'password'
                             ],
                             'CopySourceSseC' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source-server-side-encryption-customer-algorithm'
+                                'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-algorithm'
                             ],
                             'CopySourceSseCKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source-server-side-encryption-customer-key',
+                                'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-key',
                                 'type' => 'password'
                             ]
                         ],
@@ -3312,32 +3312,32 @@ class OBSRequestResource
                                 'VersionId' => [
                                     'type' => 'string',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-version-id'
+                                    'sentAs' => 'x-OSS-version-id'
                                 ],
                                 'CopySourceVersionId' => [
                                     'type' => 'string',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-copy-source-version-id'
+                                    'sentAs' => 'x-OSS-copy-source-version-id'
                                 ],
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ],
                                 'SseKms' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption'
+                                    'sentAs' => 'x-OSS-server-side-encryption'
                                 ],
                                 'SseKmsKey' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                                 ],
                                 'SseC' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                                 ],
                                 'SseCKeyMd5' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-key-MD5'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
                                 ]
                             ]
                         ]
@@ -3373,11 +3373,11 @@ class OBSRequestResource
                             ],
                             'SseC' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                             ],
                             'SseCKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-key',
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
                                 'type' => 'password'
                             ]
                         ],
@@ -3387,7 +3387,7 @@ class OBSRequestResource
                                 'Expiration' => [
                                     'type' => 'string',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-expiration'
+                                    'sentAs' => 'x-OSS-expiration'
                                 ],
                                 'LastModified' => [
                                     'type' => 'string',
@@ -3411,20 +3411,20 @@ class OBSRequestResource
                                 'VersionId' => [
                                     'type' => 'string',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-version-id'
+                                    'sentAs' => 'x-OSS-version-id'
                                 ],
                                 'WebsiteRedirectLocation' => [
                                     'type' => 'string',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-website-redirect-location'
+                                    'sentAs' => 'x-OSS-website-redirect-location'
                                 ],
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ],
                                 'StorageClass' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-storage-class'
+                                    'sentAs' => 'x-OSS-storage-class'
                                 ],
                                 'AllowOrigin' => [
                                     'location' => 'header',
@@ -3449,38 +3449,38 @@ class OBSRequestResource
                                 ],
                                 'Restore' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-restore'
+                                    'sentAs' => 'x-OSS-restore'
                                 ],
                                 'SseKms' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption'
+                                    'sentAs' => 'x-OSS-server-side-encryption'
                                 ],
                                 'SseKmsKey' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                                 ],
                                 'SseC' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                                 ],
                                 'SseCKeyMd5' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-key-MD5'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
                                 ],
                                 'Metadata' => [
                                     'location' => 'header',
                                     'type' => 'object',
-                                    'sentAs' => 'x-obs-meta-'
+                                    'sentAs' => 'x-OSS-meta-'
                                 ],
                                 'ObjectType' => [
                                     'location' => 'header',
                                     'type' => 'string',
-                                    'sentAs' => 'x-obs-object-type'
+                                    'sentAs' => 'x-OSS-object-type'
                                 ],
                                 'AppendPosition' => [
                                     'location' => 'header',
                                     'type' => 'string',
-                                    'sentAs' => 'x-obs-next-append-position'
+                                    'sentAs' => 'x-OSS-next-append-position'
                                 ]
                             ]
                         ]
@@ -3493,13 +3493,13 @@ class OBSRequestResource
                             'ACL' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-acl',
+                                'sentAs' => 'x-OSS-acl',
                                 'transform' => 'aclHeader'
                             ],
                             'StorageClass' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-storage-class',
+                                'sentAs' => 'x-OSS-storage-class',
                                 'transform' => 'storageClass'
                             ],
                             'Bucket' => [
@@ -3520,34 +3520,34 @@ class OBSRequestResource
                             'Metadata' => [
                                 'type' => 'object',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-meta-'
+                                'sentAs' => 'x-OSS-meta-'
                             ],
                             'WebsiteRedirectLocation' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-website-redirect-location'
+                                'sentAs' => 'x-OSS-website-redirect-location'
                             ],
                             'SseKms' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption'
+                                'sentAs' => 'x-OSS-server-side-encryption'
                             ],
                             'SseKmsKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                                'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                             ],
                             'SseC' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                             ],
                             'SseCKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-key',
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
                                 'type' => 'password'
                             ],
                             'Expires' => [
                                 'location' => 'header',
                                 'type' => 'string',
-                                'sentAs' => 'x-obs-expires'
+                                'sentAs' => 'x-OSS-expires'
                             ]
                         ],
                         'responseParameters' => [
@@ -3568,23 +3568,23 @@ class OBSRequestResource
                                 ],
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ],
                                 'SseKms' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption'
+                                    'sentAs' => 'x-OSS-server-side-encryption'
                                 ],
                                 'SseKmsKey' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                                 ],
                                 'SseC' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                                 ],
                                 'SseCKeyMd5' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-key-MD5'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
                                 ]
                             ]
                         ]
@@ -3725,7 +3725,7 @@ class OBSRequestResource
                                 ],
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ]
                             ]
                         ]
@@ -3756,7 +3756,7 @@ class OBSRequestResource
                             'properties' => [
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ]
                             ]
                         ]
@@ -3815,11 +3815,11 @@ class OBSRequestResource
                             ],
                             'SseC' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                             ],
                             'SseCKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-key',
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
                                 'type' => 'password'
                             ]
                         ],
@@ -3832,23 +3832,23 @@ class OBSRequestResource
                                 ],
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ],
                                 'SseKms' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption'
+                                    'sentAs' => 'x-OSS-server-side-encryption'
                                 ],
                                 'SseKmsKey' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                                 ],
                                 'SseC' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                                 ],
                                 'SseCKeyMd5' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-key-MD5'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
                                 ]
                             ]
                         ]
@@ -3925,27 +3925,27 @@ class OBSRequestResource
                                 'VersionId' => [
                                     'type' => 'string',
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-version-id'
+                                    'sentAs' => 'x-OSS-version-id'
                                 ],
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ],
                                 'SseKms' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption'
+                                    'sentAs' => 'x-OSS-server-side-encryption'
                                 ],
                                 'SseKmsKey' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                                 ],
                                 'SseC' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                                 ],
                                 'SseCKeyMd5' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-key-MD5'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
                                 ]
                             ]
                         ]
@@ -4063,7 +4063,7 @@ class OBSRequestResource
                                 ],
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ]
                             ]
                         ]
@@ -4081,12 +4081,12 @@ class OBSRequestResource
                                 'required' => true,
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source'
+                                'sentAs' => 'x-OSS-copy-source'
                             ],
                             'CopySourceRange' => [
                                 'type' => 'string',
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source-range'
+                                'sentAs' => 'x-OSS-copy-source-range'
                             ],
                             'Key' => [
                                 'required' => true,
@@ -4107,20 +4107,20 @@ class OBSRequestResource
                             ],
                             'SseC' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                             ],
                             'SseCKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-server-side-encryption-customer-key',
+                                'sentAs' => 'x-OSS-server-side-encryption-customer-key',
                                 'type' => 'password'
                             ],
                             'CopySourceSseC' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source-server-side-encryption-customer-algorithm'
+                                'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-algorithm'
                             ],
                             'CopySourceSseCKey' => [
                                 'location' => 'header',
-                                'sentAs' => 'x-obs-copy-source-server-side-encryption-customer-key',
+                                'sentAs' => 'x-OSS-copy-source-server-side-encryption-customer-key',
                                 'type' => 'password'
                             ]
                         ],
@@ -4137,23 +4137,23 @@ class OBSRequestResource
                                 ],
                                 'RequestId' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-request-id'
+                                    'sentAs' => 'x-OSS-request-id'
                                 ],
                                 'SseKms' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption'
+                                    'sentAs' => 'x-OSS-server-side-encryption'
                                 ],
                                 'SseKmsKey' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-aws-kms-key-id'
+                                    'sentAs' => 'x-OSS-server-side-encryption-aws-kms-key-id'
                                 ],
                                 'SseC' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-algorithm'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-algorithm'
                                 ],
                                 'SseCKeyMd5' => [
                                     'location' => 'header',
-                                    'sentAs' => 'x-obs-server-side-encryption-customer-key-MD5'
+                                    'sentAs' => 'x-OSS-server-side-encryption-customer-key-MD5'
                                 ]
                             ]
                         ]
