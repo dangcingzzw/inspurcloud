@@ -20,6 +20,431 @@ namespace OSS\Internal\Resource;
 class OSSRequestResource {
     public static $RESOURCE_ARRAY = [
         'operations' => [
+            'pannelMogrOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instructions' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'averageHueOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'formatConversionOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'watermarkOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'blindWatermarkDecodeOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'blindWatermarkOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'getInfoOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'roundedCornersOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'circleOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'indexcropOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'interlaceOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'sharpenOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'contrastOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'brightOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'resizeOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'rotateOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
+            'flipOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instruction' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
             'createBucket' => [
                 'httpMethod' => 'PUT',
                 'data' => [
