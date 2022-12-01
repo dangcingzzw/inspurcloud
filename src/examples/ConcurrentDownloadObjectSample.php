@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to download an object concurrently
- * from OBS using the OBS SDK for PHP.
+ * from OSS using the OSS SDK for PHP.
  */
 if (file_exists('vendor/autoload.php')) {
     require 'vendor/autoload.php';
@@ -25,14 +25,14 @@ if (file_exists('vendor/autoload.php')) {
     require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists('obs-autoloader.php')) {
-    require 'obs-autoloader.php';
+if (file_exists('OSS-autoloader.php')) {
+    require 'OSS-autoloader.php';
 } else {
-    require '../obs-autoloader.php'; // sample env
+    require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -40,16 +40,16 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
-$objectKey = 'my-obs-object-key-demo';
+$objectKey = 'my-OSS-object-key-demo';
 
 $localFilePath = '/temp/' . $objectKey;
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory([ 
+$OSSClient = OSSClient::factory([
         'key' => $ak,
         'secret' => $sk,
         'endpoint' => $endpoint,
@@ -62,7 +62,7 @@ try {
      * Create bucket
      */
     printf("Create a new bucket for demo\n\n");
-    $aa=$obsClient->createBucket([
+    $aa=$OSSClient->createBucket([
             'Bucket' => $bucketName
     ]);
     var_dump($aa);die;
@@ -73,8 +73,8 @@ try {
     /*
      * Upload an object to your bucket
      */
-    printf("Uploading a new object to OBS from a file\n\n");
-    $obsClient->putObject([ 
+    printf("Uploading a new object to OSS from a file\n\n");
+    $OSSClient->putObject([
             'Bucket' => $bucketName,
             'Key' => $objectKey,
             'SourceFile' => $sampleFilePath
@@ -83,7 +83,7 @@ try {
     /*
      * Get size of the object and pre-create a random access file to hold object data
      */
-    $resp = $obsClient->getObjectMetadata([ 
+    $resp = $OSSClient->getObjectMetadata([
             'Bucket' => $bucketName,
             'Key' => $objectKey
     ]);
@@ -121,7 +121,7 @@ try {
         $startPos = $i ++ * $blockSize;
         $endPos = ($i == $blockCount) ? $objectSize - 1 : ($i * $blockSize - 1);
         $range = sprintf('bytes=%d-%d', $startPos, $endPos);
-        $p = $obsClient->getObjectAsync([ 
+        $p = $OSSClient->getObjectAsync([
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'Range' => $range
@@ -157,18 +157,18 @@ try {
      * Deleting object
      */
     printf("Deleting object %s \n\n", $objectKey);
-    $obsClient->deleteObject([ 
+    $OSSClient->deleteObject([
             'Bucket' => $bucketName,
             'Key' => $objectKey
     ]);
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
     echo 'Response Code:' . $e->getStatusCode() . PHP_EOL;
     echo 'Error Message:' . $e->getExceptionMessage() . PHP_EOL;
     echo 'Error Code:' . $e->getExceptionCode() . PHP_EOL;
     echo 'Request ID:' . $e->getRequestId() . PHP_EOL;
     echo 'Exception Type:' . $e->getExceptionType() . PHP_EOL;
 } finally{
-    $obsClient->close();
+    $OSSClient->close();
 }
 
 function createSampleFile($filePath) {

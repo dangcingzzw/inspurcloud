@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to download an cold object
- * from OBS using the OBS SDK for PHP.
+ * from OSS using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
 	require 'vendor/autoload.php';
@@ -25,14 +25,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -40,15 +40,15 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-cold-bucket-demo';
+$bucketName = 'my-OSS-cold-bucket-demo';
 
-$objectKey = 'my-obs-cold-object-key-demo';
+$objectKey = 'my-OSS-cold-object-key-demo';
 
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -62,24 +62,24 @@ try
 	 * Create a cold bucket
 	 */
 	printf("Create a new cold bucket for demo\n\n");
-	$obsClient -> createBucket(['Bucket' => $bucketName, 'StorageClass' => ObsClient::StorageClassCold]);
+	$OSSClient -> createBucket(['Bucket' => $bucketName, 'StorageClass' => OSSClient::StorageClassCold]);
 	
 	/*
 	 * Create a cold object
 	 */
 	printf("Create a new cold object for demo\n\n");
-	$content = 'Hello OBS';
-	$obsClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' => $content]);
+	$content = 'Hello OSS';
+	$OSSClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' => $content]);
 	
 	/*
 	 * Restore the cold object
 	 */
 	printf("Restore the cold object\n\n");
-	$obsClient -> restoreObject([
+	$OSSClient -> restoreObject([
 			'Bucket' => $bucketName,
 			'Key' => $objectKey,
 			'Days' => 1,
-	    'Tier' => ObsClient::RestoreTierExpedited
+	    'Tier' => OSSClient::RestoreTierExpedited
 	]);
 	
 	/*
@@ -91,20 +91,20 @@ try
 	 * Get the cold object
 	 */
 	printf("Get the cold object\n");
-	$resp = $obsClient -> getObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
+	$resp = $OSSClient -> getObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
 	printf("\t%s\n\n", $resp['Body']);
 	
 	/*
 	 * Delete the cold object
 	 */
-	$obsClient -> deleteObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
+	$OSSClient -> deleteObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
 	
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
 	echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
 	echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
 	echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
 	echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
 	echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-	$obsClient->close ();
+	$OSSClient->close ();
 }

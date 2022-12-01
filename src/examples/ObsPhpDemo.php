@@ -21,14 +21,14 @@ if (file_exists('vendor/autoload.php')) {
     require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists('obs-autoloader.php')) {
-    require 'obs-autoloader.php';
+if (file_exists('OSS-autoloader.php')) {
+    require 'OSS-autoloader.php';
 } else {
-    require '../obs-autoloader.php'; // sample env
+    require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 use function GuzzleHttp\json_encode;
 
 $ak = '*** Provide your Access Key ***';
@@ -37,15 +37,15 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$obsClient = ObsClient::factory(array (
+$OSSClient = OSSClient::factory(array (
     'key' => $ak,
     'secret' => $sk,
     'endpoint' => $endpoint,
 ));
 
-$obsClient->initLog(array (
+$OSSClient->initLog(array (
         'FilePath' => './logs',
-        'FileName' => 'eSDK-OBS-PHP.log',
+        'FileName' => 'eSDK-OSS-PHP.log',
         'MaxFiles' => 10,
         'Level' => WARN
 ));
@@ -55,30 +55,30 @@ $objectKey = 'test';
 
 // create bucket
 function CreateBucket() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "create bucket start...\n";
     try {
-        $resp = $obsClient->createBucket(array (
+        $resp = $OSSClient->createBucket(array (
                 'Bucket' => $bucketName,
-                'ACL' => ObsClient::AclPrivate,
+                'ACL' => OSSClient::AclPrivate,
                 'LocationConstraint' => '',
-                'StorageClass' => ObsClient::StorageClassWarm
+                'StorageClass' => OSSClient::StorageClassWarm
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("Location:%s\n", $resp ['Location']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // list buckets
 function ListBuckets() {
-    global $obsClient;
+    global $OSSClient;
     echo "list bucket start...\n";
     try {
-        $resp = $obsClient->listBuckets();
+        $resp = $OSSClient->listBuckets();
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         $i = 0;
@@ -87,7 +87,7 @@ function ListBuckets() {
             $i ++;
         }
         printf("Owner[ID]:%s\n", $resp ['Owner'] ['ID']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
@@ -95,27 +95,27 @@ function ListBuckets() {
 
 // delete bucket
 function DeleteBucket() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "delete bucket start...\n";
     try {
-        $resp = $obsClient->deleteBucket(array (
+        $resp = $OSSClient->deleteBucket(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // list objects
 function ListObjects() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "list objects start...\n";
     try {
-        $resp = $obsClient->listObjects(array (
+        $resp = $OSSClient->listObjects(array (
                 'Bucket' => $bucketName,
                 'Delimiter' => '',
                 'Marker' => '',
@@ -138,18 +138,18 @@ function ListObjects() {
             printf("Contents[$i][Owner][ID]:%s\n", $content ['Owner'] ['ID']);
             $i ++;
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // list versions
 function ListVersions() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "list versions start...\n";
     try {
-        $resp = $obsClient->listVersions(array (
+        $resp = $OSSClient->listVersions(array (
                 'Bucket' => $bucketName,
                 'Delimiter' => '',
                 'KeyMarker' => '',
@@ -179,34 +179,34 @@ function ListVersions() {
             printf("DeleteMarkers[$i][Owner][ID]:%s\n", $deleteMarker ['Owner'] ['ID']);
             $i ++;
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // head bucket
 function HeadBucket() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "head bucket start...\n";
     try {
-        $resp = $obsClient->headBucket(array (
+        $resp = $OSSClient->headBucket(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket metadata
 function GetBucketMetadata() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket metatdata start...\n";
     try {
-        $resp = $obsClient->getBucketMetadata(array (
+        $resp = $OSSClient->getBucketMetadata(array (
                 "Bucket" => $bucketName,
                 "Origin" => "www.example.com",
                 "RequestHeader" => "header1"
@@ -218,41 +218,41 @@ function GetBucketMetadata() {
         printf("ExposeHeader:%s\n", $resp ["ExposeHeader"]);
         printf("AllowHeader:%s\n", $resp ["AllowHeader"]);
         printf("AllowMethod:%s\n", $resp ["AllowMethod"]);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket location
 function GetBucketLocation() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket location start...\n";
     try {
-        $resp = $obsClient->getBucketLocation(array (
+        $resp = $OSSClient->getBucketLocation(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("Location:%s\n", $resp ['Location']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket storageinfo
 function GetBucketStorageInfo() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket storage info start...\n";
     try {
-        $resp = $obsClient->getBucketStorageInfo(array (
+        $resp = $OSSClient->getBucketStorageInfo(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("Size:%d,ObjectNumber:%d\n", $resp ['Size'], $resp ['ObjectNumber']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
@@ -260,68 +260,68 @@ function GetBucketStorageInfo() {
 
 // set bucket quota
 function SetBucketQuota() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket quota start...\n";
     try {
-        $resp = $obsClient->setBucketQuota(array (
+        $resp = $OSSClient->setBucketQuota(array (
                 'Bucket' => $bucketName,
                 'StorageQuota' => 1048576
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket quota
 function GetBucketQuota() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket quota start...\n";
     try {
-        $resp = $obsClient->getBucketQuota(array (
+        $resp = $OSSClient->getBucketQuota(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("StorageQuota:%s\n", $resp ['StorageQuota']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set bucket storage policy
 function SetBucketStoragePolicy() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket storage policy start...\n";
     try {
-        $resp = $obsClient->setBucketStoragePolicy(array (
+        $resp = $OSSClient->setBucketStoragePolicy(array (
                 'Bucket' => $bucketName,
-                'StorageClass' => ObsClient::StorageClassCold
+                'StorageClass' => OSSClient::StorageClassCold
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket storage policy
 function GetBucketStoragePolicy() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket storage policy start...\n";
     try {
-        $resp = $obsClient->getBucketStoragePolicy(array (
+        $resp = $OSSClient->getBucketStoragePolicy(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("StorageClass:%s\n", $resp ['StorageClass']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
@@ -329,11 +329,11 @@ function GetBucketStoragePolicy() {
 
 // set bucket acl
 function SetBucketAcl() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket ACL start...\n";
     try {
-        $resp = $obsClient->setBucketAcl(array (
+        $resp = $OSSClient->setBucketAcl(array (
                 'Bucket' => $bucketName,
                 'ACL' => '',
                 'Owner' => array (
@@ -344,32 +344,32 @@ function SetBucketAcl() {
                                 'Grantee' => array (
                                         'ID' => 'userid'
                                 ),
-                                'Permission' => ObsClient::PermissionRead,
+                                'Permission' => OSSClient::PermissionRead,
                                 'Delivered' => true
                         ),
                         1 => array (
                                 'Grantee' => array (
-                                        'URI' => ObsClient::AllUsers
+                                        'URI' => OSSClient::AllUsers
                                 ),
-                                'Permission' => ObsClient::PermissionWrite,
+                                'Permission' => OSSClient::PermissionWrite,
                                 'Delivered' => true
                         )
                 )
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket acl
 function GetBucketAcl() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket ACL start...\n";
     try {
-        $resp = $obsClient->getBucketAcl(array (
+        $resp = $OSSClient->getBucketAcl(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
@@ -382,18 +382,18 @@ function GetBucketAcl() {
             printf("Grants[$i][Delivered]:%s\n", $grant['Delivered'] ? 'true' : 'false');
             $i ++;
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set bucket logging configuration
 function SetBucketLogging() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket logging configuration start...\n";
     try {
-        $resp = $obsClient->setBucketLogging(array (
+        $resp = $OSSClient->setBucketLogging(array (
                 'Bucket' => $bucketName,
                 'Agency' => 'your agency',
                 'LoggingEnabled' => array (
@@ -404,31 +404,31 @@ function SetBucketLogging() {
                                         'Grantee' => array (
                                                 'ID' => 'userid'
                                         ),
-                                        'Permission' => ObsClient::PermissionRead
+                                        'Permission' => OSSClient::PermissionRead
                                 ),
                                 1 => array (
                                         'Grantee' => array (
-                                                'URI' => ObsClient::AllUsers,
+                                                'URI' => OSSClient::AllUsers,
                                         ),
-                                        'Permission' => ObsClient::PermissionRead
+                                        'Permission' => OSSClient::PermissionRead
                                 )
                         )
                 )
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket logging configuration
 function GetBucketLogging() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket logging configuration start...\n";
     try {
-        $resp = $obsClient->getBucketLogging(array (
+        $resp = $OSSClient->getBucketLogging(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
@@ -443,68 +443,68 @@ function GetBucketLogging() {
                 $i ++;
             }
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set bucket policy
 function SetBucketPolicy() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket policy start...\n";
     try {
-        $resp = $obsClient->setBucketPolicy(array (
+        $resp = $OSSClient->setBucketPolicy(array (
                 'Bucket' => $bucketName,
                 'Policy' => 'your policy'
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket policy
 function GetBucketPolicy() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket policy start...\n";
     try {
-        $resp = $obsClient->getBucketPolicy(array (
+        $resp = $OSSClient->getBucketPolicy(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("Policy:%s\n", $resp ['Policy']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // delete bucket policy
 function DeleteBucketPolicy() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "delete bucket policy start...\n";
     try {
-        $resp = $obsClient->deleteBucketPolicy(array (
+        $resp = $OSSClient->deleteBucketPolicy(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set bucket lifycycle configuration
 function SetBucketLifecycle() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket lifecycle configuration start...\n";
     try {
-        $resp = $obsClient->setBucketLifecycle(array (
+        $resp = $OSSClient->setBucketLifecycle(array (
                 'Bucket' => $bucketName,
                 'Rules' => array (
                         0 => array (
@@ -513,11 +513,11 @@ function SetBucketLifecycle() {
                                 'Status' => 'Enabled',
                                 'Transitions' => array (
                                         0 => array (
-                                                'StorageClass' => ObsClient::StorageClassWarm,
+                                                'StorageClass' => OSSClient::StorageClassWarm,
                                                 'Date' => '2019-02-01T00:00:00Z'
                                         ),
                                         1 => array (
-                                                'StorageClass' => ObsClient::StorageClassCold,
+                                                'StorageClass' => OSSClient::StorageClassCold,
                                                 'Date' => '2019-03-01T00:00:00Z'
                                         )
                                 ),
@@ -526,11 +526,11 @@ function SetBucketLifecycle() {
                                 ),
                                 'NoncurrentVersionTransitions' => array (
                                         0 => array (
-                                                'StorageClass' => ObsClient::StorageClassWarm,
+                                                'StorageClass' => OSSClient::StorageClassWarm,
                                                 'NoncurrentDays' => 30
                                         ),
                                         1 => array (
-                                                'StorageClass' => ObsClient::StorageClassCold,
+                                                'StorageClass' => OSSClient::StorageClassCold,
                                                 'NoncurrentDays' => 60
                                         )
                                 ),
@@ -543,18 +543,18 @@ function SetBucketLifecycle() {
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket lifycycle configuration
 function GetBucketLifecycle() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket lifecycle configuration start...\n";
     try {
-        $resp = $obsClient->getBucketLifecycle(array (
+        $resp = $OSSClient->getBucketLifecycle(array (
                 'Bucket' => $bucketName
         ));
         $i = 0;
@@ -572,36 +572,36 @@ function GetBucketLifecycle() {
         }
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // delete bucket lifycycle configuration
 function DeleteBucketLifecycle() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "delete bucket lifecycle configuration start...\n";
     try {
-        $resp = $obsClient->deleteBucketLifecycle(array (
+        $resp = $OSSClient->deleteBucketLifecycle(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set bucket website configuration
 function SetBucketWebsite() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket website configuration start...\n";
     try {
-        $resp = $obsClient->setBucketWebsite(array (
+        $resp = $OSSClient->setBucketWebsite(array (
                 'Bucket' => $bucketName,
-                // 'RedirectAllRequestsTo'=>array('HostName'=>'obs.hostname','Protocol'=>'http'),
+                // 'RedirectAllRequestsTo'=>array('HostName'=>'OSS.hostname','Protocol'=>'http'),
                 'IndexDocument' => array (
                         'Suffix' => 'index.html'
                 ),
@@ -616,7 +616,7 @@ function SetBucketWebsite() {
                                 ),
                                 'Redirect' => array (
                                         'ReplaceKeyPrefixWith' => 'documents/',
-                                        'HostName' => 'obs.hostname',
+                                        'HostName' => 'OSS.hostname',
                                         'Protocol' => 'http',
                                         'HttpRedirectCode' => 308
                                 )
@@ -625,18 +625,18 @@ function SetBucketWebsite() {
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket website configuration
 function GetBucketWebsite() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket website configuration start...\n";
     try {
-        $resp = $obsClient->GetBucketWebsite(array (
+        $resp = $OSSClient->GetBucketWebsite(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
@@ -650,68 +650,68 @@ function GetBucketWebsite() {
             printf("RoutingRules[$i][Redirect][Protocol]:%s,RoutingRules[$i][Redirect][HostName]:%s,RoutingRules[$i][Redirect][ReplaceKeyPrefixWith]:%s,RoutingRules[$i][Redirect][ReplaceKeyWith]:%s,RoutingRules[$i][Redirect][HttpRedirectCode]:%s\n", $rout ['Redirect'] ['Protocol'], $rout ['Redirect'] ['HostName'], $rout ['Redirect'] ['ReplaceKeyPrefixWith'], $rout ['Redirect'] ['ReplaceKeyWith'], $rout ['Redirect'] ['HttpRedirectCode']);
             $i ++;
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // delete bucket website configuration
 function DeleteBucketWebsite() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "delete bucket website configuration start...\n";
     try {
-        $resp = $obsClient->deleteBucketWebsite(array (
+        $resp = $OSSClient->deleteBucketWebsite(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set bucket versioning configuration
 function SetBucketVersioning() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket versioning configuration start...\n";
     try {
-        $resp = $obsClient->setBucketVersioning(array (
+        $resp = $OSSClient->setBucketVersioning(array (
                 'Bucket' => $bucketName,
                 'Status' => 'Suspended'
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket versioning configuration
 function GetBucketVersioning() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket versioning configuration start...\n";
     try {
-        $resp = $obsClient->getBucketVersioning(array (
+        $resp = $OSSClient->getBucketVersioning(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("Status:%s\n", $resp ['Status']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set bucket cors
 function SetBucketCors() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket cors start...\n";
     try {
-        $resp = $obsClient->setBucketCors(array (
+        $resp = $OSSClient->setBucketCors(array (
                 'Bucket' => $bucketName,
                 'CorsRules' => array (
                         0 => array (
@@ -723,7 +723,7 @@ function SetBucketCors() {
                                         3 => "DELETE"
                                 ),
                                 'AllowedOrigin' => array (
-                                        0 => "obs.hostname1"
+                                        0 => "OSS.hostname1"
                                 ),
                                 'AllowedHeader' => array (
                                         0 => "header-1",
@@ -734,53 +734,53 @@ function SetBucketCors() {
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // delete bucket cors
 function DeleteBucketCors() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "delete bucket cors start...\n";
     try {
-        $resp = $obsClient->deleteBucketCors(array (
+        $resp = $OSSClient->deleteBucketCors(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket cors
 function GetBucketCors() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket cors start...\n";
     try {
-        $resp = $obsClient->getBucketCors(array (
+        $resp = $OSSClient->getBucketCors(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         print_r($resp ['CorsRules']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // options bucket
 function OptionsBucket() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "options bucket start...\n";
     try {
-        $resp = $obsClient->optionsBucket(array (
+        $resp = $OSSClient->optionsBucket(array (
                 'Bucket' => $bucketName,
-                'Origin' => 'obs.hostname1',
+                'Origin' => 'OSS.hostname1',
                 'AccessControlRequestMethods' => array (
                         0 => "PUT",
                         1 => "POST"
@@ -793,18 +793,18 @@ function OptionsBucket() {
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         print_r($resp);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set bucket tagging
 function SetBucketTagging() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket tagging start...\n";
     try {
-        $resp = $obsClient->setBucketTagging(array (
+        $resp = $OSSClient->setBucketTagging(array (
                 'Bucket' => $bucketName,
                 'Tags' => array (
                         0 => array (
@@ -819,18 +819,18 @@ function SetBucketTagging() {
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ["RequestId"]);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket tagging
 function GetBucketTagging() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket tagging start...\n";
     try {
-        $resp = $obsClient->getBucketTagging(array (
+        $resp = $OSSClient->getBucketTagging(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
@@ -838,34 +838,34 @@ function GetBucketTagging() {
         foreach ( $resp ["Tags"] as $tag ) {
             printf("Tag[%s:%s]\n", $tag ["Key"], $tag ["Value"]);
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // delete bucket tagging
 function DeleteBucketTagging() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "delete bucket tagging start...\n";
     try {
-        $resp = $obsClient->deleteBucketTagging(array (
+        $resp = $OSSClient->deleteBucketTagging(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ["RequestId"]);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set bucket notification
 function SetBucketNotification() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "set bucket notification start...\n";
     try {
-        $resp = $obsClient->setBucketNotification(array (
+        $resp = $OSSClient->setBucketNotification(array (
                 'Bucket' => $bucketName,
                 'TopicConfigurations' => array (
                         0 => array (
@@ -889,36 +889,36 @@ function SetBucketNotification() {
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ["RequestId"]);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get bucket notification
 function GetBucketNotification() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "get bucket notification start...\n";
     try {
-        $resp = $obsClient->getBucketNotification(array (
+        $resp = $OSSClient->getBucketNotification(array (
                 'Bucket' => $bucketName
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ["RequestId"]);
         print_r($resp ['TopicConfigurations']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // delete object
 function DeleteObject() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "delete object start...\n";
     try {
-        $resp = $obsClient->deleteObject(array (
+        $resp = $OSSClient->deleteObject(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'VersionId' => ''
@@ -926,22 +926,22 @@ function DeleteObject() {
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("DeleteMarker:%s,VersionId:%s\n", $resp ['DeleteMarker'], $resp ['VersionId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // options object
 function OptionsObject() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "options bucket start...\n";
     try {
-        $resp = $obsClient->optionsObject(array (
+        $resp = $OSSClient->optionsObject(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
-                'Origin' => 'obs.hostname1',
+                'Origin' => 'OSS.hostname1',
                 'AccessControlRequestMethods' => array (
                         "PUT",
                         "GET"
@@ -954,18 +954,18 @@ function OptionsObject() {
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         print_r($resp);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // delete objects
 function DeleteObjects() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "delete objects start...\n";
     try {
-        $resp = $obsClient->deleteObjects(array (
+        $resp = $OSSClient->deleteObjects(array (
                 'Bucket' => $bucketName,
                 'Objects' => array (
                         0 => array (
@@ -989,19 +989,19 @@ function DeleteObjects() {
             printf("Deleteds[$i][Key]:%s,Deleted[$i][VersionId]:%s锛孌eleted[$i][DeleteMarker]:%s锛孌eleted[$i][DeleteMarkerVersionId]:%s\n", $delete ['Key'], $delete ['VersionId'], $delete ['DeleteMarker'], $delete ['DeleteMarkerVersionId']);
             $i ++;
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // set object acl
 function SetObjectAcl() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "set object ACL start...\n";
     try {
-        $resp = $obsClient->setObjectAcl(array (
+        $resp = $OSSClient->setObjectAcl(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'Delivered' => true,
@@ -1010,13 +1010,13 @@ function SetObjectAcl() {
                                 'Grantee' => array (
                                         'ID' => 'userid',
                                 ),
-                                'Permission' => ObsClient::PermissionWrite
+                                'Permission' => OSSClient::PermissionWrite
                         ),
                         1 => array (
                                 'Grantee' => array (
-                                        'URI' => ObsClient::AllUsers
+                                        'URI' => OSSClient::AllUsers
                                 ),
-                                'Permission' => ObsClient::PermissionRead
+                                'Permission' => OSSClient::PermissionRead
                         )
                 ),
                 'Owner' => array (
@@ -1025,19 +1025,19 @@ function SetObjectAcl() {
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get object acl
 function GetObjectAcl() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "get bucket ACL start...\n";
     try {
-        $resp = $obsClient->getObjectAcl(array (
+        $resp = $OSSClient->getObjectAcl(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey
         ));
@@ -1051,41 +1051,41 @@ function GetObjectAcl() {
             printf("Grants[$i][Permission]:%s\n", $grant ['Permission']);
             $i ++;
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // restore object
 function RestoreObject() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "restore object start...\n";
 
     try {
-        $resp = $obsClient->restoreObject(array (
+        $resp = $OSSClient->restoreObject(array (
                 "Bucket" => $bucketName,
                 "Key" => $objectKey,
                 "VersionId" => NULL,
                 "Days" => 1,
-                "Tier" => ObsClient::RestoreTierExpedited
+                "Tier" => OSSClient::RestoreTierExpedited
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ["RequestId"]);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // put object
 function PutObject() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "put object start...\n";
     try {
-        $resp = $obsClient->putObject(array (
+        $resp = $OSSClient->putObject(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'Metadata' => array (
@@ -1099,19 +1099,19 @@ function PutObject() {
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("ETag:%s,VersionId:%s\n", $resp ['ETag'], $resp ['VersionId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get object metadata
 function GetObjectMetadata() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "get object metadata start...\n";
     try {
-        $resp = $obsClient->getObjectMetadata(array (
+        $resp = $OSSClient->getObjectMetadata(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey
         ));
@@ -1119,19 +1119,19 @@ function GetObjectMetadata() {
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("Expiration:%s,LastModified:%s,ContentLength:%d,StorageClass:%s\n", $resp ['Expiration'], $resp ['LastModified'], $resp ['ContentLength'], $resp ['StorageClass']);
         printf("ETag:%s,VersionId:%s,WebsiteRedirectLocation:%s\n", $resp ['ETag'], $resp ['VersionId'], $resp ['WebsiteRedirectLocation']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // get object
 function GetObject() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "get object start...\n";
     try {
-        $resp = $obsClient->getObject(array (
+        $resp = $OSSClient->getObject(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'Range' => 'bytes=0-10',
@@ -1143,19 +1143,19 @@ function GetObject() {
         printf("DeleteMarker:%s,Expiration:%s,LastModified:%s\n", $resp ['DeleteMarker'], $resp ['Expiration'], $resp ['LastModified']);
         printf("ContentLength:%d,ETag:%s,VersionId:%s,SaveAsFile:%s\n", $resp ['ContentLength'], $resp ['ETag'], $resp ['VersionId'], $resp ['SaveAsFile']);
         printf("Expires:%s,WebsiteRedirectLocation:%s\n", $resp ['Expires'], $resp ['WebsiteRedirectLocation']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // copy object
 function CopyObject() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "copy object start...\n";
     try {
-        $resp = $obsClient->copyObject(array (
+        $resp = $OSSClient->copyObject(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'CopySource' => 'bucket003/test',
@@ -1166,56 +1166,56 @@ function CopyObject() {
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("ETag:%s,VersionId:%s,LastModified:%s,CopySourceVersionId:%s\n", $resp ['ETag'], $resp ['VersionId'], $resp ['LastModified'], $resp ['CopySourceVersionId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // initiate multipart upload
 function InitiateMultipartUpload() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "initiate mutipart upload start...\n";
     try {
-        $resp = $obsClient->initiateMultipartUpload(array (
+        $resp = $OSSClient->initiateMultipartUpload(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("Bucket:%s,Key:%s,UploadId:%s\n", $resp ['Bucket'], $resp ['Key'], $resp ['UploadId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // abort multipart upload
 function AbortMultipartUpload() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "abort mutipart upload start...\n";
     try {
-        $resp = $obsClient->abortMultipartUpload(array (
+        $resp = $OSSClient->abortMultipartUpload(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'UploadId' => 'uploadid'
         ));
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // list multipart uploads
 function ListMultipartUploads() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     echo "list mutipart upload start...\n";
     try {
-        $resp = $obsClient->listMultipartUploads(array (
+        $resp = $OSSClient->listMultipartUploads(array (
                 'Bucket' => $bucketName,
                 'MaxUploads' => 1000
         ));
@@ -1234,19 +1234,19 @@ function ListMultipartUploads() {
             printf("Uploads[$i][Owner][ID]:%s,Uploads[$i][Owner][DisplayName]:%s\n", $upload ['Owner'] ['ID'], $upload ['Owner'] ['DisplayName']);
             $i ++;
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // upload part
 function UploadPart() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "upload part start...\n";
     try {
-        $resp = $obsClient->uploadPart(array (
+        $resp = $OSSClient->uploadPart(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'UploadId' => 'uploadid',
@@ -1257,19 +1257,19 @@ function UploadPart() {
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("ETag:%s\n", $resp ['ETag']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // copry part
 function CopyPart() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "copy part start...\n";
     try {
-        $resp = $obsClient->copyPart(array (
+        $resp = $OSSClient->copyPart(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'UploadId' => 'uploadid',
@@ -1279,19 +1279,19 @@ function CopyPart() {
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("ETag:%s,LastModified:%s\n", $resp ['ETag'], $resp ['LastModified']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // list parts
 function ListParts() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "list parts start...\n";
     try {
-        $resp = $obsClient->listParts(array (
+        $resp = $OSSClient->listParts(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'UploadId' => 'uploadid',
@@ -1309,19 +1309,19 @@ function ListParts() {
             printf("Parts[$i][PartNumber]:%s,Parts[$i][LastModified]:%s,Parts[$i][ETag]:%s,Parts[$i][Size]:%d\n", $part ['PartNumber'], $part ['LastModified'], $part ['ETag'], $part ['Size']);
             $i ++;
         }
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }
 
 // merge parts
 function CompleteMultipartUpload() {
-    global $obsClient;
+    global $OSSClient;
     global $bucketName;
     global $objectKey;
     echo "complete multipart upload start...\n";
     try {
-        $resp = $obsClient->completeMultipartUpload(array (
+        $resp = $OSSClient->completeMultipartUpload(array (
                 'Bucket' => $bucketName,
                 'Key' => $objectKey,
                 'UploadId' => 'uploadid',
@@ -1335,7 +1335,7 @@ function CompleteMultipartUpload() {
         printf("HttpStatusCode:%s\n", $resp ['HttpStatusCode']);
         printf("RequestId:%s\n", $resp ['RequestId']);
         printf("Bucket:%s,Key:%s,ETag:%s,VersionId:%s,Location:%s\n", $resp ['Bucket'], $resp ['Key'], $resp ['ETag'], $resp ['VersionId'], $resp ['Location']);
-    } catch ( ObsException $e ) {
+    } catch ( OSSException $e ) {
         echo $e;
     }
 }

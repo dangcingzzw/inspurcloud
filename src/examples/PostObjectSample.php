@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to post object under specified bucket from
- * OBS using the OBS SDK for PHP.
+ * OSS using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
     require 'vendor/autoload.php';
@@ -25,13 +25,13 @@ if (file_exists ( 'vendor/autoload.php' )) {
     require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-    require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+    require 'OSS-autoloader.php';
 } else {
-    require '../obs-autoloader.php'; // sample env
+    require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
+use OSS\OSSClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
@@ -41,16 +41,16 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
-$objectKey = 'my-obs-object-key-demo';
+$objectKey = 'my-OSS-object-key-demo';
 
-$signature = 'obs';
+$signature = 'OSS';
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
         'key' => $ak,
         'secret' => $sk,
         'endpoint' => $endpoint,
@@ -63,7 +63,7 @@ $obsClient = ObsClient::factory ( [
  * Create bucket
  */
 printf("Create a new bucket for demo\n\n");
-$obsClient -> createBucket(['Bucket' => $bucketName]);
+$OSSClient -> createBucket(['Bucket' => $bucketName]);
 
 
 /*
@@ -76,19 +76,19 @@ createSampleFile($sampleFilePath);
  * Claim a post object request
  */
 $formParams = [];
-if (strcasecmp($signature, 'obs') === 0) {
-    $formParams['x-obs-acl'] = ObsClient::AclPublicRead;
+if (strcasecmp($signature, 'OSS') === 0) {
+    $formParams['x-OSS-acl'] = OSSClient::AclPublicRead;
 } else {
-    $formParams['acl'] = ObsClient::AclPublicRead;
+    $formParams['acl'] = OSSClient::AclPublicRead;
 }
 $formParams['content-type'] = 'text/plain';
 
-$res = $obsClient -> createPostSignature(['Bucket' => $bucketName, 'Key' => $objectKey, 'Expires' => 3600, 'FormParams' => $formParams]);
+$res = $OSSClient -> createPostSignature(['Bucket' => $bucketName, 'Key' => $objectKey, 'Expires' => 3600, 'FormParams' => $formParams]);
 
 $formParams['key'] = $objectKey;
 $formParams['policy'] = $res['Policy'];
 
-if (strcasecmp($signature, 'obs') === 0) {
+if (strcasecmp($signature, 'OSS') === 0) {
     $formParams['Accesskeyid'] = $ak;
 } else {
     $formParams['AWSAccesskeyid'] = $ak;

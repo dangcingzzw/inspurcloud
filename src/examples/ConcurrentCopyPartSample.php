@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to multipart upload an object concurrently by copy mode
- * to OBS using the OBS SDK for PHP.
+ * to OSS using the OSS SDK for PHP.
  */
 
 if (file_exists ( 'vendor/autoload.php' )) {
@@ -26,14 +26,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -41,20 +41,20 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
 $sourceBucketName = $bucketName;
 
-$sourceObjectKey = 'my-obs-object-key-demo';
+$sourceObjectKey = 'my-OSS-object-key-demo';
 
 
 $objectKey = $sourceObjectKey . '-back';
 
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -68,7 +68,7 @@ try
 	 * Create bucket
 	 */
 	printf("Create a new bucket for demo\n\n");
-	$obsClient -> createBucket(['Bucket' => $bucketName]);
+	$OSSClient -> createBucket(['Bucket' => $bucketName]);
 	
 	
 	$sampleFilePath = '/temp/test.txt'; //sample large file path
@@ -78,20 +78,20 @@ try
 	/*
 	 * Upload an object to your source bucket
 	 */
-	$obsClient -> putObject(['Bucket' => $sourceBucketName,
+	$OSSClient -> putObject(['Bucket' => $sourceBucketName,
         'Key' => $sourceObjectKey, 'SourceFile' => $sampleFilePath,
         'random-object-name'=>true]);
 	
 	/*
 	 * Claim a upload id firstly
 	 */
-	$resp = $obsClient -> initiateMultipartUpload(['Bucket' => $bucketName, 'Key' => $objectKey]);
+	$resp = $OSSClient -> initiateMultipartUpload(['Bucket' => $bucketName, 'Key' => $objectKey]);
 	$uploadId = $resp['UploadId'];
 	printf("Claiming a new upload id %s\n\n", $uploadId);
 	
 	
 	$partSize = 5 * 1024 * 1024;
-	$resp = $obsClient -> getObjectMetadata(['Bucket' => $sourceBucketName, 'Key' => $sourceObjectKey]);
+	$resp = $OSSClient -> getObjectMetadata(['Bucket' => $sourceBucketName, 'Key' => $sourceObjectKey]);
 	$objectSize = $resp['ContentLength'];
 	
 	$partCount = $objectSize % $partSize === 0 ? intval($objectSize / $partSize) : intval($objectSize / $partSize) + 1;
@@ -106,12 +106,12 @@ try
 	 */
 	$promise = null;
 	$parts = [];
-	printf("Begin to upload multiparts to OBS by copy mode\n\n");
+	printf("Begin to upload multiparts to OSS by copy mode\n\n");
 	for($i = 0; $i < $partCount; $i++){
 		$rangeStart = $i * $partSize;
 		$rangeEnd = ($i + 1 === $partCount) ? $objectSize - 1 : $rangeStart + $partSize - 1;
 		$partNumber = $i + 1;
-		$p = $obsClient -> copyPartAsync([
+		$p = $OSSClient -> copyPartAsync([
 				'Bucket' => $bucketName,
 				'Key' => $objectKey,
 				'UploadId' => $uploadId,
@@ -155,7 +155,7 @@ try
 	 * View all parts uploaded recently
 	 */
 	printf("Listing all parts......\n");
-	$resp = $obsClient -> listParts(['Bucket' => $bucketName, 'Key' => $objectKey, 'UploadId' => $uploadId]);
+	$resp = $OSSClient -> listParts(['Bucket' => $bucketName, 'Key' => $objectKey, 'UploadId' => $uploadId]);
 	foreach ($resp['Parts'] as $part)
 	{
 		printf("\tPart#%d, ETag=%s\n", $part['PartNumber'], $part['ETag']);
@@ -165,7 +165,7 @@ try
 	/*
 	 * Complete to upload multiparts
 	 */
-	$resp = $obsClient->completeMultipartUpload([
+	$resp = $OSSClient->completeMultipartUpload([
 			'Bucket' => $bucketName,
 			'Key' => $objectKey,
 			'UploadId' => $uploadId,
@@ -176,14 +176,14 @@ try
 		unlink($sampleFilePath);
 	}
 	
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
 	echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
 	echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
 	echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
 	echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
 	echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-	$obsClient->close ();
+	$OSSClient->close ();
 }
 
 

@@ -271,7 +271,7 @@ instructions:指令名称集合 可选参数：,format-conversion,rotate，flip�
       rounded-corners:
             radus:radus:矩形四角圆角的半径
       
-
+### 图片分片上传示例
 - 代码示例：
 ...
          $obsClient -> pannelMogrOperation([
@@ -312,8 +312,109 @@ instructions:指令名称集合 可选参数：,format-conversion,rotate，flip�
 ...
 
 
-
-
+- 代码示例：
+...
+/*
+	 * Create bucket
+	 */
+	printf("Create a new bucket for demo\n\n");
+	$obsClient -> createBucket(['Bucket' => $bucketName]);
+	
+	/*
+	 * Claim a upload id firstly
+	 */
+	$resp = $obsClient -> initiateMultipartUpload(['Bucket' => $bucketName, 'Key' => $objectKey]);
+	
+	$uploadId = $resp['UploadId'];
+	printf("Claiming a new upload id %s\n\n", $uploadId);
+	
+	$sampleFilePath = '/temp/test.txt'; //sample large file path
+	//  you can prepare a large file in you filesystem first
+	createSampleFile($sampleFilePath);
+	
+	$partSize = 5 * 1024 * 1024;
+	$fileLength = filesize($sampleFilePath);
+	
+	$partCount = $fileLength % $partSize === 0 ?  intval($fileLength / $partSize) : intval($fileLength / $partSize) + 1;
+	
+	if($partCount > 10000){
+		throw new \RuntimeException('Total parts count should not exceed 10000');
+	}
+	
+	printf("Total parts count %d\n\n", $partCount);
+	$parts = [];
+	$promise = null;
+	/*
+	 * Upload multiparts to your bucket
+	 */
+	printf("Begin to upload multiparts to OBS from a file\n\n");
+	for($i = 0; $i < $partCount; $i++){
+		$offset = $i * $partSize;
+		$currPartSize = ($i + 1 === $partCount) ? $fileLength - $offset : $partSize;
+		$partNumber = $i + 1;
+		$p = $obsClient -> uploadPartAsync([
+				'Bucket' => $bucketName, 
+				'Key' => $objectKey, 
+				'UploadId' => $uploadId, 
+				'PartNumber' => $partNumber,
+				'SourceFile' => $sampleFilePath,
+				'Offset' => $offset,
+				'PartSize' => $currPartSize
+		], function($exception, $resp) use(&$parts, $partNumber) {
+			$parts[] = ['PartNumber' => $partNumber, 'ETag' => $resp['ETag']];
+			printf ( "Part#" . strval ( $partNumber ) . " done\n\n" );
+		});
+		
+		if($promise === null){
+			$promise = $p;
+		}
+	}
+	
+	/*
+	 * Waiting for all parts finished
+	 */
+	$promise -> wait();
+	
+	usort($parts, function($a, $b){
+		if($a['PartNumber'] === $b['PartNumber']){
+			return 0;
+		}
+		return $a['PartNumber'] > $b['PartNumber'] ? 1 : -1;
+	});
+	
+	/*
+	 * Verify whether all parts are finished
+	 */
+	if(count($parts) !== $partCount){
+		throw new \RuntimeException('Upload multiparts fail due to some parts are not finished yet');
+	}
+	
+	
+	printf("Succeed to complete multiparts into an object named %s\n\n", $objectKey);
+	
+	/*
+	 * View all parts uploaded recently
+	 */
+	printf("Listing all parts......\n");
+	$resp = $obsClient -> listParts(['Bucket' => $bucketName, 'Key' => $objectKey, 'UploadId' => $uploadId]);
+	foreach ($resp['Parts'] as $part)
+	{
+		printf("\tPart#%d, ETag=%s\n", $part['PartNumber'], $part['ETag']);
+	}
+	printf("\n");
+	
+	
+	/*
+	 * Complete to upload multiparts
+	 */
+	$resp = $obsClient->completeMultipartUpload([
+			'Bucket' => $bucketName,
+			'Key' => $objectKey,
+			'UploadId' => $uploadId,
+			'Parts'=> $parts
+	]);
+	
+...
 
  
 

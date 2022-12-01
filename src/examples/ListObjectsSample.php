@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to list objects under specified bucket
- * from OBS using the OBS SDK for PHP.
+ * from OSS using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
 	require 'vendor/autoload.php';
@@ -25,14 +25,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -40,13 +40,13 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -61,7 +61,7 @@ try
 	 * Create bucket
 	 */
 	printf("Create a new bucket for demo\n\n");
-	$obsClient -> createBucket(['Bucket' => $bucketName]);
+	$OSSClient -> createBucket(['Bucket' => $bucketName]);
 	
 	
 	/*
@@ -71,7 +71,7 @@ try
 	$keyPrefix = 'MyObjectKey';
 	for($i = 0;$i < 100;$i++){
 		$key = $keyPrefix . strval($i);
-		$p = $obsClient -> putObjectAsync(['Bucket' => $bucketName, 'Key' => $key, 'Body' => 'Hello OBS'],function(){});
+		$p = $OSSClient -> putObjectAsync(['Bucket' => $bucketName, 'Key' => $key, 'Body' => 'Hello OSS'],function(){});
 		if($promise === null){
 			$promise = $p;
 		}
@@ -86,7 +86,7 @@ try
 	 */
 	printf("List objects using default parameters:\n");
 	
-	$resp = $obsClient -> listObjects(['Bucket' => $bucketName]);
+	$resp = $OSSClient -> listObjects(['Bucket' => $bucketName]);
 	foreach ( $resp ['Contents'] as $content ) {
 		printf("\t%s etag[%s]\n", $content ['Key'], $content ['ETag']);
 	}
@@ -97,7 +97,7 @@ try
 	 */
 	printf("List the first 10 objects:\n");
 	
-	$resp = $obsClient -> listObjects(['Bucket' => $bucketName, 'MaxKeys' => 10]);
+	$resp = $OSSClient -> listObjects(['Bucket' => $bucketName, 'MaxKeys' => 10]);
 	foreach ( $resp ['Contents'] as $content ) {
 		printf("\t%s etag[%s]\n", $content ['Key'], $content ['ETag']);
 	}
@@ -108,7 +108,7 @@ try
 	 * List the second 10 objects using marker
 	 */
 	printf("List the second 10 objects using marker:\n");
-	$resp = $obsClient -> listObjects(['Bucket' => $bucketName, 'MaxKeys' => 10, 'Marker' => $theSecond10ObjectsMarker]);
+	$resp = $OSSClient -> listObjects(['Bucket' => $bucketName, 'MaxKeys' => 10, 'Marker' => $theSecond10ObjectsMarker]);
 	foreach ( $resp ['Contents'] as $content ) {
 		printf("\t%s etag[%s]\n", $content ['Key'], $content ['ETag']);
 	}
@@ -118,7 +118,7 @@ try
 	 * List objects with prefix and max keys
 	 */
 	printf("List objects with prefix and max keys:\n");
-	$resp = $obsClient -> listObjects(['Bucket' => $bucketName, 'MaxKeys' => 5, 'Prefix' => $keyPrefix . '2']);
+	$resp = $OSSClient -> listObjects(['Bucket' => $bucketName, 'MaxKeys' => 5, 'Prefix' => $keyPrefix . '2']);
 	foreach ( $resp ['Contents'] as $content ) {
 		printf("\t%s etag[%s]\n", $content ['Key'], $content ['ETag']);
 	}
@@ -132,7 +132,7 @@ try
 	$index = 1;
 	do{
 		
-		$resp = $obsClient -> listObjects(['Bucket' => $bucketName, 'MaxKeys' => 10, 'Marker' => $nextMarker]);
+		$resp = $OSSClient -> listObjects(['Bucket' => $bucketName, 'MaxKeys' => 10, 'Marker' => $nextMarker]);
 		$nextMarker = $resp['NextMarker'];
 		printf("Page:%d\n", $index++);
 		foreach ( $resp ['Contents'] as $content ) {
@@ -144,7 +144,7 @@ try
 	/*
 	 * Delete all the objects created
 	 */
-	$resp = $obsClient->deleteObjects([
+	$resp = $OSSClient->deleteObjects([
 			'Bucket'=>$bucketName,
 			'Objects'=>$keys,
 			'Quiet'=> false,
@@ -169,12 +169,12 @@ try
 	}
 	
 	
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
 	echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
 	echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
 	echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
 	echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
 	echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-	$obsClient->close ();
+	$OSSClient->close ();
 }

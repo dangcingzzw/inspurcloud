@@ -16,8 +16,8 @@
  */
 
 /**
- * This sample demonstrates how to upload multiparts to OBS
- * using the OBS SDK for PHP.
+ * This sample demonstrates how to upload multiparts to OSS
+ * using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
 	require 'vendor/autoload.php';
@@ -25,14 +25,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -40,15 +40,15 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
-$objectKey = 'my-obs-object-key-demo';
+$objectKey = 'my-OSS-object-key-demo';
 
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -59,14 +59,14 @@ $obsClient = ObsClient::factory ( [
 try
 {
 	printf("Create a new bucket for demo\n\n");
-	$obsClient -> createBucket(['Bucket' => $bucketName]);
+	$OSSClient -> createBucket(['Bucket' => $bucketName]);
 	
 	/*
 	 * Step 1: initiate multipart upload
 	 */
 	printf("Step 1: initiate multipart upload\n\n");
 	
-	$resp = $obsClient -> initiateMultipartUpload(['Bucket'=>$bucketName,
+	$resp = $OSSClient -> initiateMultipartUpload(['Bucket'=>$bucketName,
 			'Key'=>$objectKey]);
 	
 	$uploadId = $resp['UploadId'];
@@ -74,12 +74,12 @@ try
 	 * Step 2: upload a part
 	 */
 	printf("Step 2: upload a part\n\n");
-	$resp = $obsClient->uploadPart([
+	$resp = $OSSClient->uploadPart([
 			'Bucket'=>$bucketName,
 			'Key' => $objectKey,
 			'UploadId'=>$uploadId,
 			'PartNumber'=>1,
-			'Body' => 'Hello OBS',
+			'Body' => 'Hello OSS',
             'random-object-name'=>true,
 	]);
 	
@@ -89,7 +89,7 @@ try
 	 * Step 3: complete multipart upload
 	 */
 	printf("Step 3: complete multipart upload\n\n");
-	$obsClient->completeMultipartUpload([
+	$OSSClient->completeMultipartUpload([
 			'Bucket'=>$bucketName,
 			'Key'=>$objectKey,
 			'UploadId'=>$uploadId,
@@ -99,12 +99,12 @@ try
 	]);
 	
 	
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
 	echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
 	echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
 	echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
 	echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
 	echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-	$obsClient->close ();
+	$OSSClient->close ();
 }

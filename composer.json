@@ -1,6 +1,6 @@
 {
 	"name" : "inspurcloud/php-oss-sdk",
-	"description" : "OBS PHP SDK",
+	"description" : "OSS PHP SDK",
 	"license":"Apache-2.0",
 	"version":"1.0.9",
 	"require" : {
@@ -20,7 +20,7 @@
    	 "minimum-stability": "dev",
     	"autoload": {
        		 "psr-4": {
-            		 "Obs\\": "src/Obs"
+            		 "OSS\\": "src/OSS"
       	  }
     }
 }

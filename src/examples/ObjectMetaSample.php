@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to set/get self-defined metadata for object
- * on OBS using the OBS SDK for PHP.
+ * on OSS using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
 	require 'vendor/autoload.php';
@@ -25,14 +25,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -40,15 +40,15 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
-$objectKey = 'my-obs-object-key-demo';
+$objectKey = 'my-OSS-object-key-demo';
 
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -62,12 +62,12 @@ try
 	 * Create bucket
 	 */
 	printf("Create a new bucket for demo\n\n");
-	$obsClient -> createBucket(['Bucket' => $bucketName]);
+	$OSSClient -> createBucket(['Bucket' => $bucketName]);
 	
 	/*
 	 * Create object
 	 */
-	$content = 'Hello OBS';
+	$content = 'Hello OSS';
 	
 	/*
 	 * Setting self-defined metadata
@@ -77,14 +77,14 @@ try
 	
 	$metadata['meta1'] = 'value1';
 	$metadata['meta2'] = 'value2';
-	$obsClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' => $content, 'Metadata' => $metadata]);
+	$OSSClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' => $content, 'Metadata' => $metadata]);
 	
 	printf("Create object %s successfully!\n\n", $objectKey);
 	
 	/*
 	 * Get object metadata
 	 */
-	$resp = $obsClient -> getObjectMetadata(['Bucket' => $bucketName, 'Key' => $objectKey]);
+	$resp = $OSSClient -> getObjectMetadata(['Bucket' => $bucketName, 'Key' => $objectKey]);
 	printf("Getting object metadata:\n");
 	foreach ($resp['Metadata'] as $key => $value){
 		printf("\t%s=%s\n", $key, $value);
@@ -93,15 +93,15 @@ try
 	/*
 	 * Delete object
 	 */
-	$obsClient -> deleteObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
+	$OSSClient -> deleteObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
 	
 	
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
 	echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
 	echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
 	echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
 	echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
 	echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-	$obsClient->close ();
+	$OSSClient->close ();
 }

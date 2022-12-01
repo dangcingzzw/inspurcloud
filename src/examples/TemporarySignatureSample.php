@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to do common operations in temporary signature way
- * on OBS using the OBS SDK for PHP.
+ * on OSS using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
 	require 'vendor/autoload.php';
@@ -25,13 +25,13 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
+use OSS\OSSClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 
@@ -41,14 +41,14 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
-$objectKey = 'my-obs-object-key-demo';
+$objectKey = 'my-OSS-object-key-demo';
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -62,7 +62,7 @@ $httpClient = new Client(['verify' => false]);
  * Create bucket
  */
 $method = 'PUT';
-$res = $obsClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method]);
+$res = $OSSClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method]);
 doAction('Create bucket', $method, $res['SignedUrl']);
 
 /*
@@ -71,25 +71,25 @@ doAction('Create bucket', $method, $res['SignedUrl']);
 $method = 'PUT';
 $content = '<CORSConfiguration><CORSRule><AllowedMethod>PUT</AllowedMethod><AllowedOrigin>http://www.a.com</AllowedOrigin><AllowedHeader>header1</AllowedHeader><MaxAgeSeconds>100</MaxAgeSeconds><ExposeHeader>header2</ExposeHeader></CORSRule></CORSConfiguration>';
 $headers = ['Content-Length'=> strval(strlen($content)), 'Content-MD5' => base64_encode(md5($content, true))];
-$res = $obsClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method, 'SpecialParam' => 'cors', 'Headers' => $headers]);
+$res = $OSSClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method, 'SpecialParam' => 'cors', 'Headers' => $headers]);
 doAction('Set bucket cors ', $method, $res['SignedUrl'], $content, $res['ActualSignedRequestHeaders']);
 
 
 $method = 'GET';
-$res= $obsClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method, 'SpecialParam' => 'cors']);
+$res= $OSSClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method, 'SpecialParam' => 'cors']);
 doAction('Get bucket cors ', $method, $res['SignedUrl']);
 
 $method = 'DELETE';
-$res= $obsClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method, 'SpecialParam' => 'cors']);
+$res= $OSSClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method, 'SpecialParam' => 'cors']);
 doAction('Delete bucket cors ', $method, $res['SignedUrl']);
 
 /*
  * Create object
  */
 $method = 'PUT';
-$content = 'Hello OBS';
+$content = 'Hello OSS';
 $headers = ['Content-Length'=> strval(strlen($content))];
-$res = $obsClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey, 'Headers'=> $headers]);
+$res = $OSSClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey, 'Headers'=> $headers]);
 doAction('Create object', $method, $res['SignedUrl'], $content, $res['ActualSignedRequestHeaders']);
 		
 
@@ -97,34 +97,34 @@ doAction('Create object', $method, $res['SignedUrl'], $content, $res['ActualSign
  * Get object
  */
 $method = 'GET';
-$res = $obsClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey]);
+$res = $OSSClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey]);
 doAction('Get object', $method, $res['SignedUrl']);
 
 /*
  * Set/Get object acl 
  */
 $method = 'PUT';
-$headers = ['x-amz-acl'=> ObsClient::AclPublicRead];
-$res = $obsClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey, 'Headers'=> $headers, 'SpecialParam' => 'acl']);
+$headers = ['x-amz-acl'=> OSSClient::AclPublicRead];
+$res = $OSSClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey, 'Headers'=> $headers, 'SpecialParam' => 'acl']);
 doAction('Set object Acl', $method, $res['SignedUrl'], null, $res['ActualSignedRequestHeaders']);
 
 
 $method = 'GET';
-$res = $obsClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey, 'SpecialParam' => 'acl']);
+$res = $OSSClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey, 'SpecialParam' => 'acl']);
 doAction('Get object Acl', $method, $res['SignedUrl']);
 
 /*
  * Delete object
  */
 $method = 'DELETE';
-$res = $obsClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey]);
+$res = $OSSClient -> createSignedUrl(['Method' => $method, 'Bucket' => $bucketName, 'Key' => $objectKey]);
 doAction('Delete object', $method, $res['SignedUrl']);
 
 /*
  * Delete bucket
  */
 $method = 'DELETE';
-$res = $obsClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method]);
+$res = $OSSClient -> createSignedUrl(['Bucket' => $bucketName, 'Method' => $method]);
 doAction('Delete bucket', $method, $res['SignedUrl']);
 
 

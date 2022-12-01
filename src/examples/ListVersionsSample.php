@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to list versions under specified bucket
- * from OBS using the OBS SDK for PHP.
+ * from OSS using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
 	require 'vendor/autoload.php';
@@ -25,14 +25,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -40,13 +40,13 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -60,12 +60,12 @@ try
 	 * Create bucket
 	 */
 	printf("Create a new bucket for demo\n\n");
-	$obsClient -> createBucket(['Bucket' => $bucketName]);
+	$OSSClient -> createBucket(['Bucket' => $bucketName]);
 	
 	/*
 	 * Enable bucket versioning
 	 */
-	$obsClient -> setBucketVersioningConfiguration(['Bucket' => $bucketName, 'Status' => 'Enabled']);
+	$OSSClient -> setBucketVersioningConfiguration(['Bucket' => $bucketName, 'Status' => 'Enabled']);
 	
 	/*
 	 * First prepare folders and sub folders
@@ -78,11 +78,11 @@ try
 	
 	for($i = 0; $i<5; $i++){
 		$key = $folderPrefix . $i . '/';
-		$obsClient -> putObject(['Bucket'=>$bucketName, 'Key' => $key]);
+		$OSSClient -> putObject(['Bucket'=>$bucketName, 'Key' => $key]);
 		$keys[] = ['Key' => $key];
 		for($j = 0; $j < 3; $j++){
 			$subKey = $key . $subFolderPrefix . $j . '/';
-			$obsClient -> putObject(['Bucket'=>$bucketName, 'Key' => $subKey]);
+			$OSSClient -> putObject(['Bucket'=>$bucketName, 'Key' => $subKey]);
 			$keys[] = ['Key' => $subKey];
 		}
 	}
@@ -90,11 +90,11 @@ try
 	/*
 	 * Insert 2 objects in each folder
 	 */
-	$resp = $obsClient -> listObjects(['Bucket' => $bucketName]);
+	$resp = $OSSClient -> listObjects(['Bucket' => $bucketName]);
 	foreach ($resp ['Contents'] as $content ) {
 		for($k =0; $k < 2; $k++){
 			$objectKey = $content['Key'] . $keyPrefix . $k; 
-			$obsClient -> putObject(['Bucket'=>$bucketName, 'Key' => $objectKey, 'Body' => 'Hello OBS']);
+			$OSSClient -> putObject(['Bucket'=>$bucketName, 'Key' => $objectKey, 'Body' => 'Hello OSS']);
 			$keys[] = ['Key' => $objectKey];
 		}
 	}
@@ -102,8 +102,8 @@ try
 	/*
 	 * Insert 2 objects in root path
 	 */
-	$obsClient -> putObject(['Bucket'=>$bucketName, 'Key' => $keyPrefix . '0', 'Body' =>  'Hello OBS']);
-	$obsClient -> putObject(['Bucket'=>$bucketName, 'Key' => $keyPrefix . '1', 'Body' =>  'Hello OBS']);
+	$OSSClient -> putObject(['Bucket'=>$bucketName, 'Key' => $keyPrefix . '0', 'Body' =>  'Hello OSS']);
+	$OSSClient -> putObject(['Bucket'=>$bucketName, 'Key' => $keyPrefix . '1', 'Body' =>  'Hello OSS']);
 	
 	printf("Put %d objects completed.\n\n", count($keys));
 	
@@ -113,7 +113,7 @@ try
 	/*
 	 * List versions using default parameters, will return up to 1000 objects
 	 */
-	$resp = $obsClient -> listVersions (['Bucket' => $bucketName ]);
+	$resp = $OSSClient -> listVersions (['Bucket' => $bucketName ]);
 	printf("\tVersions:\n");
 	foreach ( $resp ['Versions'] as $version ) {
 		printf("\t%s etag[%s] versionid[%s]\n", $version['Key'], $version['ETag'],$version['VersionId']);
@@ -136,7 +136,7 @@ try
 	$nextMarker = null;
 	$index = 1;
 	do{
-		$resp = $obsClient -> listVersions(['Bucket' => $bucketName, 'MaxKeys' => 10, 'KeyMarker' => $nextMarker]);
+		$resp = $OSSClient -> listVersions(['Bucket' => $bucketName, 'MaxKeys' => 10, 'KeyMarker' => $nextMarker]);
 		$nextMarker = $resp['NextKeyMarker'];
 		printf("Page:%d\n", $index++);
 		
@@ -157,7 +157,7 @@ try
 	 * List all versions group by folder
 	 */
 	printf("List all versions group by folder \n");
-	$resp = $obsClient -> listVersions(['Bucket' => $bucketName, 'Delimiter' => '/']);
+	$resp = $OSSClient -> listVersions(['Bucket' => $bucketName, 'Delimiter' => '/']);
 	
 	printf("Root path:\n");
 	printf("\tVersions:\n");
@@ -178,7 +178,7 @@ try
 	/*
 	 * Delete all the objects created
 	 */
-	$resp = $obsClient->deleteObjects([
+	$resp = $OSSClient->deleteObjects([
 			'Bucket'=>$bucketName,
 			'Objects'=>$keys,
 			'Quiet'=> false,
@@ -202,24 +202,24 @@ try
 		$i++;
 	}
 	
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
 	echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
 	echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
 	echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
 	echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
 	echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-	$obsClient->close ();
+	$OSSClient->close ();
 }
 
 function listVersionsByPrefix($resp){
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	while(!empty($resp ['CommonPrefixes'])){
 		foreach ($resp ['CommonPrefixes'] as $commonPrefix){
 			$commonPrefix = $commonPrefix['Prefix'];
 			printf("Folder %s:\n", $commonPrefix);
-			$resp = $obsClient -> listVersions(['Bucket' => $bucketName, 'Delimiter' => '/', 'Prefix' => $commonPrefix]);
+			$resp = $OSSClient -> listVersions(['Bucket' => $bucketName, 'Delimiter' => '/', 'Prefix' => $commonPrefix]);
 			printf("\tVersions:\n");
 			foreach ( $resp ['Versions'] as $version ) {
 				printf("\t%s etag[%s] versionid[%s]\n", $version['Key'], $version['ETag'],$version['VersionId']);

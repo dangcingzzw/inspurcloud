@@ -18,7 +18,7 @@
 /**
  * This sample demonstrates how to do bucket-related operations
  * (such as do bucket ACL/CORS/Lifecycle/Logging/Website/Location/Tagging/OPTIONS) 
- * on OBS using the OBS SDK for PHP.
+ * on OSS using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
 	require 'vendor/autoload.php';
@@ -26,14 +26,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 use function GuzzleHttp\json_encode;
 
 $ak = '*** Provide your Access Key ***';
@@ -42,13 +42,13 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [ 
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -128,23 +128,23 @@ try {
 	 * Delete bucket operation
 	 */
 	deleteBucket ();
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
 	echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
 	echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
 	echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
 	echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
 	echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-	$obsClient->close ();
+	$OSSClient->close ();
 }
 
 
 function createBucket() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	
-	$resp = $obsClient->createBucket ([
+	$resp = $OSSClient->createBucket ([
 		'Bucket' => $bucketName,
 	]);
 	printf("HttpStatusCode:%s\n\n", $resp ['HttpStatusCode']);
@@ -153,10 +153,10 @@ function createBucket()
 
 function getBucketLocation() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	
-	$promise = $obsClient -> getBucketLocationAsync(['Bucket' => $bucketName], function($exception, $resp){
+	$promise = $OSSClient -> getBucketLocationAsync(['Bucket' => $bucketName], function($exception, $resp){
 		printf("Getting bucket location %s\n\n", $resp ['Location']);
 	});
 	$promise -> wait();
@@ -164,9 +164,9 @@ function getBucketLocation()
 
 function getBucketStorageInfo() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
-	$promise = $obsClient -> getBucketStorageInfoAsync(['Bucket' => $bucketName], function($exception, $resp){
+	$promise = $OSSClient -> getBucketStorageInfoAsync(['Bucket' => $bucketName], function($exception, $resp){
 		printf("Getting bucket storageInfo Size:%d,ObjectNumber:%d\n\n", $resp ['Size'], $resp ['ObjectNumber']);
 	});
 	$promise -> wait();
@@ -174,14 +174,14 @@ function getBucketStorageInfo()
 
 function doBucketQuotaOperation()
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
-	$obsClient->setBucketQuota ([
+	$OSSClient->setBucketQuota ([
 			'Bucket' => $bucketName,
 			'StorageQuota' => 1024 * 1024 * 1024//Set bucket quota to 1GB
 	]);
 	
-	$resp = $obsClient->getBucketQuota ([
+	$resp = $OSSClient->getBucketQuota ([
 			'Bucket' => $bucketName
 	]);
 	printf ("Getting bucket quota:%s\n\n", $resp ['StorageQuota'] );
@@ -189,29 +189,29 @@ function doBucketQuotaOperation()
 
 function doBucketVersioningOperation() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	
-	$resp = $obsClient->getBucketVersioningConfiguration ( [
+	$resp = $OSSClient->getBucketVersioningConfiguration ( [
 			'Bucket' => $bucketName
 	]);
 	printf ( "Getting bucket versioning config:%s\n\n", $resp ['Status']);
 	//Enable bucket versioning
-	$obsClient->setBucketVersioningConfiguration ([
+	$OSSClient->setBucketVersioningConfiguration ([
 			'Bucket' => $bucketName,
 			'Status' => 'Enabled'
 	]);
-	$resp = $obsClient->getBucketVersioningConfiguration ( [
+	$resp = $OSSClient->getBucketVersioningConfiguration ( [
 			'Bucket' => $bucketName
 	]);
 	printf ( "Current bucket versioning config:%s\n\n", $resp ['Status']);
 	
 	//Suspend bucket versioning
-	$obsClient->setBucketVersioningConfiguration ([
+	$OSSClient->setBucketVersioningConfiguration ([
 			'Bucket' => $bucketName,
 			'Status' => 'Suspended'
 	]);
-	$resp = $obsClient->getBucketVersioningConfiguration ( [
+	$resp = $OSSClient->getBucketVersioningConfiguration ( [
 			'Bucket' => $bucketName
 	]);
 	printf ( "Current bucket versioning config:%s\n\n", $resp ['Status']);
@@ -219,26 +219,26 @@ function doBucketVersioningOperation()
 
 function doBucketAclOperation() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
-	printf ("Setting bucket ACL to ". ObsClient::AclPublicRead. "\n\n");
-	$obsClient->setBucketAcl ([
+	printf ("Setting bucket ACL to ". OSSClient::AclPublicRead. "\n\n");
+	$OSSClient->setBucketAcl ([
 			'Bucket' => $bucketName,
-			'ACL' => ObsClient::AclPublicRead,
+			'ACL' => OSSClient::AclPublicRead,
 	]);
 	
-	$resp = $obsClient->getBucketAcl ([
+	$resp = $OSSClient->getBucketAcl ([
 			'Bucket' => $bucketName
 	]);
 	printf ("Getting bucket ACL:%s\n\n", json_encode($resp -> toArray()));
 	
-	printf ("Setting bucket ACL to ". ObsClient::AclPrivate. "\n\n");
+	printf ("Setting bucket ACL to ". OSSClient::AclPrivate. "\n\n");
 	
-	$obsClient->setBucketAcl ([
+	$OSSClient->setBucketAcl ([
 			'Bucket' => $bucketName,
-			'ACL' => ObsClient::AclPrivate,
+			'ACL' => OSSClient::AclPrivate,
 	]);
-	$resp = $obsClient->getBucketAcl ([
+	$resp = $OSSClient->getBucketAcl ([
 			'Bucket' => $bucketName
 	]);
 	printf ("Getting bucket ACL:%s\n\n", json_encode($resp -> toArray()));
@@ -247,31 +247,31 @@ function doBucketAclOperation()
 
 function doBucketCorsOperation() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	printf ("Setting bucket CORS\n\n");
-	$obsClient->setBucketCors ( [
+	$OSSClient->setBucketCors ( [
 			'Bucket' => $bucketName,
 			'CorsRule' => [
 					[
 							'AllowedMethod' => ['HEAD', 'GET', 'PUT'],
 							'AllowedOrigin' => ['http://www.a.com', 'http://www.b.com'],
 							'AllowedHeader'=> ['Authorization'],
-							'ExposeHeaders' => ['x-obs-test1', 'x-obs-test2'],
+							'ExposeHeaders' => ['x-OSS-test1', 'x-OSS-test2'],
 							'MaxAgeSeconds' => 100
 					]
 			]
 	] );
-	printf ("Getting bucket CORS:%s\n\n", json_encode($obsClient-> getBucketCors(['Bucket' => $bucketName])-> toArray()));
+	printf ("Getting bucket CORS:%s\n\n", json_encode($OSSClient-> getBucketCors(['Bucket' => $bucketName])-> toArray()));
 	
 }
 
 function optionsBucket() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	
-	$resp = $obsClient->optionsBucket([
+	$resp = $OSSClient->optionsBucket([
 			'Bucket'=>$bucketName,
 			'Origin'=>'http://www.a.com',
 			'AccessControlRequestMethods' => ['PUT'],
@@ -283,11 +283,11 @@ function optionsBucket()
 
 function getBucketMetadata() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	printf ("Getting bucket metadata\n\n");
 	
-	$resp = $obsClient->getBucketMetadata ( [
+	$resp = $OSSClient->getBucketMetadata ( [
 			"Bucket" => $bucketName,
 			"Origin" => "http://www.a.com",
 			"RequestHeader" => "Authorization"
@@ -301,16 +301,16 @@ function getBucketMetadata()
 	printf ( "\tAllowMethod:%s\n", $resp ["AllowMethod"] );
 	
 	printf ("Deleting bucket CORS\n\n");
-	$obsClient -> deleteBucketCors(['Bucket' => $bucketName]);
+	$OSSClient -> deleteBucketCors(['Bucket' => $bucketName]);
 }
 
 function doBucketLifecycleOperation() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	
-	$ruleId0 = "delete obsoleted files";
-	$matchPrefix0 = "obsoleted/";
+	$ruleId0 = "delete OSSoleted files";
+	$matchPrefix0 = "OSSoleted/";
 	$ruleId1 = "delete temporary files";
 	$matchPrefix1 = "temporary/";
 	$ruleId2 = "delete temp files";
@@ -318,7 +318,7 @@ function doBucketLifecycleOperation()
 	
 	printf ("Setting bucket lifecycle\n\n");
 	
-	$obsClient->setBucketLifecycleConfiguration ( [
+	$OSSClient->setBucketLifecycleConfiguration ( [
 			'Bucket' => $bucketName,
 			'Rules' => [
 					[
@@ -344,7 +344,7 @@ function doBucketLifecycleOperation()
 	
 	printf ("Getting bucket lifecycle\n\n");
 	
-	$resp = $obsClient->getBucketLifecycleConfiguration ([
+	$resp = $OSSClient->getBucketLifecycleConfiguration ([
 			'Bucket' => $bucketName
 	]);
 	
@@ -357,17 +357,17 @@ function doBucketLifecycleOperation()
 	}
 	
 	printf ("Deleting bucket lifecycle\n\n");
-	$obsClient->deleteBucketLifecycleConfiguration (['Bucket' => $bucketName]);
+	$OSSClient->deleteBucketLifecycleConfiguration (['Bucket' => $bucketName]);
 }
 
 function doBucketLoggingOperation($ownerId) 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	
-	printf ("Setting bucket ACL, give the log-delivery group " . ObsClient::PermissionWrite ." and " .ObsClient::PermissionReadAcp ." permissions\n\n");
+	printf ("Setting bucket ACL, give the log-delivery group " . OSSClient::PermissionWrite ." and " .OSSClient::PermissionReadAcp ." permissions\n\n");
 	
-	$obsClient->setBucketAcl ([
+	$OSSClient->setBucketAcl ([
 			'Bucket' => $bucketName,
 			'Owner' => [
 					'ID' => $ownerId
@@ -375,17 +375,17 @@ function doBucketLoggingOperation($ownerId)
 			'Grants' => [
 					[
 							'Grantee' => [
-							        'URI' => ObsClient::GroupLogDelivery,
+							        'URI' => OSSClient::GroupLogDelivery,
 									'Type' => 'Group'
 							],
-					       'Permission' => ObsClient::PermissionWrite
+					       'Permission' => OSSClient::PermissionWrite
 					],
 					[
 							'Grantee' => [
-							        'URI' => ObsClient::GroupLogDelivery,
+							        'URI' => OSSClient::GroupLogDelivery,
 									'Type' => 'Group'
 							],
-					       'Permission' => ObsClient::PermissionReadAcp
+					       'Permission' => OSSClient::PermissionReadAcp
 					],
 			]
 	]);
@@ -395,7 +395,7 @@ function doBucketLoggingOperation($ownerId)
 	$targetBucket = $bucketName;
 	$targetPrefix = 'log-';
 	
-	$obsClient->setBucketLoggingConfiguration ( [
+	$OSSClient->setBucketLoggingConfiguration ( [
 			'Bucket' => $bucketName,
 			'LoggingEnabled' => [
 					'TargetBucket' => $targetBucket,
@@ -403,10 +403,10 @@ function doBucketLoggingOperation($ownerId)
 					'TargetGrants' => [
 							[
 									'Grantee' => [
-									        'URI' => ObsClient::GroupAuthenticatedUsers,
+									        'URI' => OSSClient::GroupAuthenticatedUsers,
 											'Type' => 'Group'
 									],
-									'Permission' => ObsClient::PermissionRead
+									'Permission' => OSSClient::PermissionRead
 							]
 					]
 			]
@@ -414,7 +414,7 @@ function doBucketLoggingOperation($ownerId)
 	
 	printf ("Getting bucket logging\n");
 	
-	$resp = $obsClient->getBucketLoggingConfiguration ([
+	$resp = $OSSClient->getBucketLoggingConfiguration ([
 			'Bucket' => $bucketName
 	]);
 	
@@ -423,19 +423,19 @@ function doBucketLoggingOperation($ownerId)
 	
 	printf ("Deletting bucket logging\n");
 	
-	$obsClient->setBucketLoggingConfiguration ( [
+	$OSSClient->setBucketLoggingConfiguration ( [
 			'Bucket' => $bucketName
 	]);
 }
 
 function doBucketWebsiteOperation() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	
 	printf ("Setting bucket website\n\n");
 	
-	$obsClient->setBucketWebsiteConfiguration ([
+	$OSSClient->setBucketWebsiteConfiguration ([
 			'Bucket' => $bucketName,
 			'IndexDocument' => [
 					'Suffix' => 'index.html'
@@ -446,24 +446,24 @@ function doBucketWebsiteOperation()
 	]);
 	printf ("Getting bucket website\n");
 	
-	$resp = $obsClient->GetBucketWebsiteConfiguration ( [
+	$resp = $OSSClient->GetBucketWebsiteConfiguration ( [
 			'Bucket' => $bucketName
 	]);
 	
 	printf ("\tIndex document=%s, error document=%s\n\n", $resp ['IndexDocument'] ['Suffix'], $resp ['ErrorDocument'] ['Key']);
 	printf ("Deletting bucket website\n");
 	
-	$obsClient->deleteBucketWebsiteConfiguration ([
+	$OSSClient->deleteBucketWebsiteConfiguration ([
 			'Bucket' => $bucketName
 	]);
 }
 
 function doBucketTaggingOperation() 
 {
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	printf ("Setting bucket tagging\n\n");
-	$obsClient -> setBucketTagging([
+	$OSSClient -> setBucketTagging([
 			'Bucket' => $bucketName,
 			'TagSet' => [
 					[
@@ -478,22 +478,22 @@ function doBucketTaggingOperation()
 	]);
 	printf ("Getting bucket tagging\n");
 	
-	$resp = $obsClient -> getBucketTagging(['Bucket' => $bucketName]);
+	$resp = $OSSClient -> getBucketTagging(['Bucket' => $bucketName]);
 	
 	printf ("\t%s\n\n", json_encode($resp->toArray()));
 	
 	printf ("Deletting bucket tagging\n\n");
 	
-	$obsClient -> deleteBucketTagging(['Bucket' => $bucketName]);
+	$OSSClient -> deleteBucketTagging(['Bucket' => $bucketName]);
 }
 
 function deleteBucket() 
 {
 	
-	global $obsClient;
+	global $OSSClient;
 	global $bucketName;
 	
-	$resp = $obsClient->deleteBucket ([
+	$resp = $OSSClient->deleteBucket ([
 			'Bucket' => $bucketName
 	] );
 	printf("Deleting bucket %s successfully!\n\n", $bucketName);

@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to download an cold object
- * from OBS using the OBS SDK for PHP.
+ * from OSS using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
     require 'vendor/autoload.php';
@@ -25,14 +25,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
     require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-    require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+    require 'OSS-autoloader.php';
 } else {
-    require '../obs-autoloader.php'; // sample env
+    require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -40,15 +40,15 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-cold-bucket-demo';
+$bucketName = 'my-OSS-cold-bucket-demo';
 
-$objectKey = 'my-obs-cold-object-key-demo';
+$objectKey = 'my-OSS-cold-object-key-demo';
 
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
     'key' => $ak,
     'secret' => $sk,
     'endpoint' => $endpoint,
@@ -62,7 +62,7 @@ try
      * value:百分比
      */
     printf("图片处理-旋转-测试用例");
-    $obsClient -> rotateOperation([
+    $OSSClient -> rotateOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -74,7 +74,7 @@ try
      * value:horizontal（水平翻转） vertical（垂直翻转）
      */
     printf("图片处理-翻转-测试用例");
-    $obsClient -> flipOperation([
+    $OSSClient -> flipOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -98,7 +98,7 @@ try
      * value: 等比例缩放百分比值 0-100
      */
     printf("图片处理缩放-自定义-测试用例");
-    $obsClient -> resizeOperation([
+    $OSSClient -> resizeOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -111,7 +111,7 @@ try
         ]
     ]);
     printf("图片处理缩放-按缩放比例-测试用例");
-    $obsClient -> resizeOperation([
+    $OSSClient -> resizeOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -130,7 +130,7 @@ try
      * saveArea:默认为0，表示第一块。
      */
     printf("图片处理-索引裁剪-测试用例");
-    $obsClient -> indexcropOperation([
+    $OSSClient -> indexcropOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -145,7 +145,7 @@ try
      * radus:裁剪半径
      */
     printf("图片处理-内切圆裁剪-测试用例");
-    $obsClient -> circleOperation([
+    $OSSClient -> circleOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -158,7 +158,7 @@ try
      * radus:裁剪半径
      */
     printf("图片处理-圆角矩形裁剪-测试用例");
-    $obsClient -> roundedCornersOperation([
+    $OSSClient -> roundedCornersOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -169,14 +169,14 @@ try
 
 
     printf("图片处理-获取图片信息 -测试用例");
-    $obsClient -> getInfoOperation([
+    $OSSClient -> getInfoOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
         ]
     ]);
 
     printf("图片处理-获取图片平均色调 -测试用例");
-    $obsClient -> averageHueOperation([
+    $OSSClient -> averageHueOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
         ]
@@ -186,7 +186,7 @@ try
      * type:可选参数heif,avif
      */
     printf("图片处理-转换格式 -测试用例");
-    $obsClient -> formatConversionOperation([
+    $OSSClient -> formatConversionOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -204,7 +204,7 @@ try
      * position:位置  可选值tl，top，tr，left，center，right，bl，bottom，br
      */
     printf("图片处理-普通水印 -测试用例");
-    $obsClient -> watermarkOperation([
+    $OSSClient -> watermarkOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instruction'=>[
@@ -226,7 +226,7 @@ try
      * content:文本内容或图片base64格式数据
      */
     printf("图片处理-盲水印 -测试用例");
-        $obsClient->blindWatermarkOperation([
+        $OSSClient->blindWatermarkOperation([
             'body' => [
                 'file' => $filePath,
                 'instruction' => [
@@ -237,7 +237,7 @@ try
         ]);
 
     printf("图片管道处理-缩略，裁剪，旋转等-测试用例");
-    $obsClient -> pannelMogrOperation([
+    $OSSClient -> pannelMogrOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instructions'=>[
@@ -271,7 +271,7 @@ try
 
     //水印综合处理
     printf("图片处理-普通水印 -测试用例");
-    $obsClient -> pannelWatermarkOperation([
+    $OSSClient -> pannelWatermarkOperation([
         'body'=>[
             'file' => 'https://sfff.oss.cn-north-3.inspurcloudoss.com/012.jpg',
             'instructions'=>[
@@ -305,12 +305,12 @@ try
     ]);
 
 
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
     echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
     echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
     echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
     echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
     echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-    $obsClient->close ();
+    $OSSClient->close ();
 }

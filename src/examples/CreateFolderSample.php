@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to create an empty folder under
- * specified bucket to OBS using the OBS SDK for PHP.
+ * specified bucket to OSS using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
 	require 'vendor/autoload.php';
@@ -25,14 +25,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -40,15 +40,15 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
-$objectKey = 'my-obs-object-key-demo';
+$objectKey = 'my-OSS-object-key-demo';
 
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -62,7 +62,7 @@ try
 	 * Create bucket
 	 */
 	echo "Create a new bucket for demo\n\n";
-	$obsClient -> createBucket(['Bucket' => $bucketName]);
+	$OSSClient -> createBucket(['Bucket' => $bucketName]);
 	
 	
 	/*
@@ -70,13 +70,13 @@ try
 	 * suffixed with a slash
 	 */
 	$keySuffixWithSlash = "MyObjectKey1/";
-	$obsClient -> putObject(['Bucket' => $bucketName, 'Key' => $keySuffixWithSlash]);
+	$OSSClient -> putObject(['Bucket' => $bucketName, 'Key' => $keySuffixWithSlash]);
 	echo "Creating an empty folder " . $keySuffixWithSlash . "\n\n";
 	
 	/*
 	 * Verify whether the size of the empty folder is zero
 	 */
-	$resp = $obsClient -> getObject(['Bucket' => $bucketName, 'Key' => $keySuffixWithSlash]);
+	$resp = $OSSClient -> getObject(['Bucket' => $bucketName, 'Key' => $keySuffixWithSlash]);
 	
 	echo "Size of the empty folder '" . $keySuffixWithSlash. "' is " . $resp['ContentLength'] .  "\n\n";
 	if($resp['Body']){
@@ -86,15 +86,15 @@ try
 	/*
 	 * Create an object under the folder just created
 	 */
-	$obsClient -> putObject(['Bucket' => $bucketName, 'Key' => $keySuffixWithSlash . $objectKey, 'Body' => 'Hello OBS']);
+	$OSSClient -> putObject(['Bucket' => $bucketName, 'Key' => $keySuffixWithSlash . $objectKey, 'Body' => 'Hello OSS']);
 
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
 	echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
 	echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
 	echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
 	echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
 	echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-	$obsClient->close ();
+	$OSSClient->close ();
 }
 

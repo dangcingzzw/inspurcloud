@@ -17,7 +17,7 @@
 
 /**
  * This sample demonstrates how to download an object
- * from OBS in different ways using the OBS SDK for PHP.
+ * from OSS in different ways using the OSS SDK for PHP.
  */
 if (file_exists ( 'vendor/autoload.php' )) {
 	require 'vendor/autoload.php';
@@ -25,14 +25,14 @@ if (file_exists ( 'vendor/autoload.php' )) {
 	require '../vendor/autoload.php'; // sample env
 }
 
-if (file_exists ( 'obs-autoloader.php' )) {
-	require 'obs-autoloader.php';
+if (file_exists ( 'OSS-autoloader.php' )) {
+	require 'OSS-autoloader.php';
 } else {
-	require '../obs-autoloader.php'; // sample env
+	require '../OSS-autoloader.php'; // sample env
 }
 
-use Obs\ObsClient;
-use Obs\ObsException;
+use OSS\OSSClient;
+use OSS\OSSException;
 
 $ak = '*** Provide your Access Key ***';
 
@@ -40,14 +40,14 @@ $sk = '*** Provide your Secret Key ***';
 
 $endpoint = 'https://your-endpoint:443';
 
-$bucketName = 'my-obs-bucket-demo';
+$bucketName = 'my-OSS-bucket-demo';
 
-$objectKey = 'my-obs-object-key-demo';
+$objectKey = 'my-OSS-object-key-demo';
 
 /*
- * Constructs a obs client instance with your account for accessing OBS
+ * Constructs a OSS client instance with your account for accessing OSS
  */
-$obsClient = ObsClient::factory ( [
+$OSSClient = OSSClient::factory ( [
 		'key' => $ak,
 		'secret' => $sk,
 		'endpoint' => $endpoint,
@@ -61,20 +61,20 @@ try
 	 * Create bucket
 	 */
 	printf("Create a new bucket for demo\n\n");
-	$obsClient -> createBucket(['Bucket' => $bucketName]);
+	$OSSClient -> createBucket(['Bucket' => $bucketName]);
 	
 	/*
 	 * Upload an object to your bucket
 	 */
-	printf("Uploading a new object to OBS\n\n");
+	printf("Uploading a new object to OSS\n\n");
 	$content = "abcdefghijklmnopqrstuvwxyz\n\t0123456789011234567890\n";
-	$obsClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' => $content]);
+	$OSSClient -> putObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'Body' => $content]);
 	
 	/*
 	 * Download the object as an inputstream and display it directly
 	 */
 	printf("Downloading an object\n");
-	$resp = $obsClient -> getObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
+	$resp = $OSSClient -> getObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
 	printf("\t%s\n\n", $resp['Body']);
 	
 	
@@ -82,20 +82,20 @@ try
 	 * Download the object to a file
 	 */
 	printf("Downloading an object to local file\n");
-	$resp = $obsClient -> getObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'SaveAsFile' => '/temp/' .$objectKey]);
+	$resp = $OSSClient -> getObject(['Bucket' => $bucketName, 'Key' => $objectKey, 'SaveAsFile' => '/temp/' .$objectKey]);
 	printf("\tSaveAsFile:%s\n\n", $resp['SaveAsFile']);
 	
 	
 	printf("Deleting object %s \n\n", $objectKey);
-	$obsClient -> deleteObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
+	$OSSClient -> deleteObject(['Bucket' => $bucketName, 'Key' => $objectKey]);
 	
 	
-} catch ( ObsException $e ) {
+} catch ( OSSException $e ) {
 	echo 'Response Code:' . $e->getStatusCode () . PHP_EOL;
 	echo 'Error Message:' . $e->getExceptionMessage () . PHP_EOL;
 	echo 'Error Code:' . $e->getExceptionCode () . PHP_EOL;
 	echo 'Request ID:' . $e->getRequestId () . PHP_EOL;
 	echo 'Exception Type:' . $e->getExceptionType () . PHP_EOL;
 } finally{
-	$obsClient->close ();
+	$OSSClient->close ();
 }
