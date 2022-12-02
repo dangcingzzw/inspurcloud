@@ -59,8 +59,8 @@ define('EMERGENCY', Logger::EMERGENCY);
  * @method Model averageHueOperation(array $args = []);
  * @method Model pannelMogrOperation(array $args = []);
  *
- * @method Model createPostSignature(array $args=[]);
- * @method Model createSignedUrl(array $args=[]);
+ * @method Model createPostSignature(array $args = []);
+ * @method Model createSignedUrl(array $args = []);
  * @method Model createBucket(array $args = []);
  * @method Model listBuckets();
  * @method Model deleteBucket(array $args = []);
@@ -103,7 +103,6 @@ define('EMERGENCY', Logger::EMERGENCY);
  * @method Model deleteFetchPolicy(array $args = []);
  * @method Model setFetchJob(array $args = []);
  * @method Model getFetchJob(array $args = []);
-
  *
  * @method Model putObject(array $args = []);
  * @method Model getObject(array $args = []);
@@ -122,7 +121,7 @@ define('EMERGENCY', Logger::EMERGENCY);
  * @method Model listMultipartUploads(array $args = []);
  * @method Model optionsObject(array $args = []);
  * @method Model restoreObject(array $args = []);
- *  
+ *
  * @method Promise createBucketAsync(array $args = [], callable $callback);
  * @method Promise listBucketsAsync(callable $callback);
  * @method Promise deleteBucketAsync(array $args = [], callable $callback);
@@ -160,7 +159,7 @@ define('EMERGENCY', Logger::EMERGENCY);
  * @method Promise getBucketTaggingAsync(array $args = [], callable $callback);
  * @method Promise deleteBucketTaggingAsync(array $args = [], callable $callback);
  * @method Promise optionsBucketAsync(array $args = [], callable $callback);
- * 
+ *
  * @method Promise putObjectAsync(array $args = [], callable $callback);
  * @method Promise getObjectAsync(array $args = [], callable $callback);
  * @method Promise copyObjectAsync(array $args = [], callable $callback);
@@ -183,251 +182,305 @@ define('EMERGENCY', Logger::EMERGENCY);
  * @method Model deleteFetchPolicyAsync(array $args = [], callable $callback);
  * @method Model setFetchJobAsync(array $args = [], callable $callback);
  * @method Model getFetchJobAsync(array $args = [], callable $callback);
- * 
+ *
  */
 class OSSClient
 {
-	
-	const SDK_VERSION = '3.21.9';
-	
-	const AclPrivate = 'private';
-	const AclPublicRead = 'public-read';
-	const AclPublicReadWrite = 'public-read-write';
-	const AclPublicReadDelivered = 'public-read-delivered';
-	const AclPublicReadWriteDelivered = 'public-read-write-delivered';
-	
-	const AclAuthenticatedRead = 'authenticated-read';
-	const AclBucketOwnerRead = 'bucket-owner-read';
-	const AclBucketOwnerFullControl = 'bucket-owner-full-control';
-	const AclLogDeliveryWrite = 'log-delivery-write';
-	
-	const StorageClassStandard = 'STANDARD';
-	const StorageClassWarm = 'WARM';
-	const StorageClassCold = 'COLD';
-	
-	const PermissionRead = 'READ';
-	const PermissionWrite = 'WRITE';
-	const PermissionReadAcp = 'READ_ACP';
-	const PermissionWriteAcp = 'WRITE_ACP';
-	const PermissionFullControl = 'FULL_CONTROL';
-	
-	const AllUsers = 'Everyone';
-	
-	const GroupAllUsers = 'AllUsers';
-	const GroupAuthenticatedUsers = 'AuthenticatedUsers';
-	const GroupLogDelivery = 'LogDelivery';
-	
-	const RestoreTierExpedited = 'Expedited';
-	const RestoreTierStandard = 'Standard';
-	const RestoreTierBulk = 'Bulk';
-	
-	const GranteeGroup = 'Group';
-	const GranteeUser = 'CanonicalUser';
-	
-	const CopyMetadata = 'COPY';
-	const ReplaceMetadata = 'REPLACE';
-	
-	const SignatureV2 = 'v2';
-	const SignatureV4 = 'v4';
-	const SigantureOSS = 'OSS';
-	
-	const ObjectCreatedAll = 'ObjectCreated:*';
-	const ObjectCreatedPut = 'ObjectCreated:Put';
-	const ObjectCreatedPost = 'ObjectCreated:Post';
-	const ObjectCreatedCopy = 'ObjectCreated:Copy';
-	const ObjectCreatedCompleteMultipartUpload = 'ObjectCreated:CompleteMultipartUpload';
-	const ObjectRemovedAll = 'ObjectRemoved:*';
-	const ObjectRemovedDelete = 'ObjectRemoved:Delete';
-	const ObjectRemovedDeleteMarkerCreated = 'ObjectRemoved:DeleteMarkerCreated';
-	
-	use Internal\SendRequestTrait;
-	use Internal\GetResponseTrait;
-	
-	private $factorys;
 
-	public function __construct(array $config = []){
-		$this ->factorys = [];
-		
-		$this -> ak = strval($config['key']);
-		$this -> sk = strval($config['secret']);
-		
-		if(isset($config['security_token'])){
-		    $this -> securityToken = strval($config['security_token']);
-		}
-		
-		if(isset($config['endpoint'])){
-			$this -> endpoint = trim(strval($config['endpoint']));
-		}
-		
-		if($this -> endpoint === ''){
-			throw new \RuntimeException('endpoint is not set');
-		}
-		
-		while($this -> endpoint[strlen($this -> endpoint)-1] === '/'){
-			$this -> endpoint = substr($this -> endpoint, 0, strlen($this -> endpoint)-1);
-		}
-		
-		if(strpos($this-> endpoint, 'http') !== 0){
-			$this -> endpoint = 'https://' . $this -> endpoint;
-		}
-		
-		if(isset($config['signature'])){
-		    $this -> signature = strval($config['signature']);
-		}
-		
-		if(isset($config['path_style'])){
-			$this -> pathStyle = $config['path_style'];
-		}
-		
-		if(isset($config['region'])){
-			$this -> region = strval($config['region']);
-		}
-		
-		if(isset($config['ssl_verify'])){
-			$this -> sslVerify = $config['ssl_verify'];
-		}else if(isset($config['ssl.certificate_authority'])){
-			$this -> sslVerify = $config['ssl.certificate_authority'];
-		}
-		
-		if(isset($config['max_retry_count'])){
-			$this -> maxRetryCount = intval($config['max_retry_count']);
-		}
-		
-		if(isset($config['timeout'])){
-			$this -> timeout = intval($config['timeout']);
-		}
-		
-		if(isset($config['socket_timeout'])){
-			$this -> socketTimeout = intval($config['socket_timeout']);
-		}
-		
-		if(isset($config['connect_timeout'])){
-			$this -> connectTimeout = intval($config['connect_timeout']);
-		}
-		
-		if(isset($config['chunk_size'])){
-			$this -> chunkSize = intval($config['chunk_size']);
-		}
-		
-		if(isset($config['exception_response_mode'])){
-			$this -> exceptionResponseMode = $config['exception_response_mode'];
-		}
+    const SDK_VERSION = '3.21.9';
 
-		if (isset($config['is_cname'])) {
-		    $this -> isCname = $config['is_cname'];
+    const AclPrivate = 'private';
+    const AclPublicRead = 'public-read';
+    const AclPublicReadWrite = 'public-read-write';
+    const AclPublicReadDelivered = 'public-read-delivered';
+    const AclPublicReadWriteDelivered = 'public-read-write-delivered';
+
+    const AclAuthenticatedRead = 'authenticated-read';
+    const AclBucketOwnerRead = 'bucket-owner-read';
+    const AclBucketOwnerFullControl = 'bucket-owner-full-control';
+    const AclLogDeliveryWrite = 'log-delivery-write';
+
+    const StorageClassStandard = 'STANDARD';
+    const StorageClassWarm = 'WARM';
+    const StorageClassCold = 'COLD';
+
+    const PermissionRead = 'READ';
+    const PermissionWrite = 'WRITE';
+    const PermissionReadAcp = 'READ_ACP';
+    const PermissionWriteAcp = 'WRITE_ACP';
+    const PermissionFullControl = 'FULL_CONTROL';
+
+    const AllUsers = 'Everyone';
+
+    const GroupAllUsers = 'AllUsers';
+    const GroupAuthenticatedUsers = 'AuthenticatedUsers';
+    const GroupLogDelivery = 'LogDelivery';
+
+    const RestoreTierExpedited = 'Expedited';
+    const RestoreTierStandard = 'Standard';
+    const RestoreTierBulk = 'Bulk';
+
+    const GranteeGroup = 'Group';
+    const GranteeUser = 'CanonicalUser';
+
+    const CopyMetadata = 'COPY';
+    const ReplaceMetadata = 'REPLACE';
+
+    const SignatureV2 = 'v2';
+    const SignatureV4 = 'v4';
+    const SigantureOSS = 'OSS';
+
+    const ObjectCreatedAll = 'ObjectCreated:*';
+    const ObjectCreatedPut = 'ObjectCreated:Put';
+    const ObjectCreatedPost = 'ObjectCreated:Post';
+    const ObjectCreatedCopy = 'ObjectCreated:Copy';
+    const ObjectCreatedCompleteMultipartUpload = 'ObjectCreated:CompleteMultipartUpload';
+    const ObjectRemovedAll = 'ObjectRemoved:*';
+    const ObjectRemovedDelete = 'ObjectRemoved:Delete';
+    const ObjectRemovedDeleteMarkerCreated = 'ObjectRemoved:DeleteMarkerCreated';
+
+    use Internal\SendRequestTrait;
+    use Internal\GetResponseTrait;
+
+    private $factorys;
+
+    public function __construct(array $config = [])
+    {
+        $this->factorys = [];
+
+        $this->ak = strval($config['key']);
+        $this->sk = strval($config['secret']);
+
+        if (isset($config['security_token'])) {
+            $this->securityToken = strval($config['security_token']);
         }
-		
-		$host = parse_url($this -> endpoint)['host'];
-		if(filter_var($host, FILTER_VALIDATE_IP) !== false) {
-		    $this -> pathStyle = true;
-		}
 
-		$handler = self::choose_handler($this);
-		
-		$this -> httpClient = new Client(
-				[
-						'timeout' => 0,
-						'read_timeout' => $this -> socketTimeout,
-						'connect_timeout' => $this -> connectTimeout,
-						'allow_redirects' => false,
-						'verify' => $this -> sslVerify,
-						'expect' => false,
-						'handler' => HandlerStack::create($handler),
-						'curl' => [
-								CURLOPT_BUFFERSIZE => $this -> chunkSize
-						]
-				]
-		);
-		
-	}
-	
-	public function __destruct(){
-		$this-> close();
-	}
-	
-	public function refresh($key, $secret, $security_token=false){
-	    $this -> ak = strval($key);
-	    $this -> sk = strval($secret);
-	    if($security_token){
-	        $this -> securityToken = strval($security_token);
-	    }
-	}
-	
-	/**
-	 * Get the default User-Agent string to use with Guzzle
-	 *
-	 * @return string
-	 */
-	private static function default_user_agent()
-	{
-		static $defaultAgent = '';
-		if (!$defaultAgent) {
-			$defaultAgent = 'OSS-sdk-php/' . self::SDK_VERSION;
-		}
-		
-		return $defaultAgent;
-	}
-	
-	/**
-	 * Factory method to create a new OSS client using an array of configuration options.
-	 *
-	 * @param array $config Client configuration data
-	 *
-	 * @return OSSClient
-	 */
-	public static function factory(array $config = [])
-	{
-		return new OSSClient($config);
-	}
-	
-	public function close(){
-		if($this->factorys){
-			foreach ($this->factorys as $factory){
-				$factory->close();
-			}
-		}
-	}
-	
-	public function initLog(array $logConfig= [])
-	{
-		OSSLog::initLog($logConfig);
-		
-		$msg = [];
-		$msg[] = '[OSS SDK Version=' . self::SDK_VERSION;
-		$msg[] = 'Endpoint=' . $this->endpoint;
-		$msg[] = 'Access Mode=' . ($this->pathStyle ? 'Path' : 'Virtual Hosting').']';
-		
-		OSSLog::commonLog(WARNING, implode("];[", $msg));
-	}
-	
-	private static function choose_handler($OSSclient)
-	{
-		$handler = null;
-		if (function_exists('curl_multi_exec') && function_exists('curl_exec')) {
-			$f1 = new SdkCurlFactory(50);
-			$f2 = new SdkCurlFactory(3);
-			$OSSclient->factorys[] = $f1;
-			$OSSclient->factorys[] = $f2;
-			$handler = Proxy::wrapSync(new CurlMultiHandler(['handle_factory' => $f1]), new CurlHandler(['handle_factory' => $f2]));
-		} elseif (function_exists('curl_exec')) {
-			$f = new SdkCurlFactory(3);
-			$OSSclient->factorys[] = $f;
-			$handler = new CurlHandler(['handle_factory' => $f]);
-		} elseif (function_exists('curl_multi_exec')) {
-			$f = new SdkCurlFactory(50);
-			$OSSclient->factorys[] = $f;
-			$handler = new CurlMultiHandler(['handle_factory' => $f1]);
-		}
-		
-		if (ini_get('allow_url_fopen')) {
-			$handler = $handler
-			? Proxy::wrapStreaming($handler, new SdkStreamHandler())
-			: new SdkStreamHandler();
-		} elseif (!$handler) {
-			throw new \RuntimeException('GuzzleHttp requires cURL, the '
-					. 'allow_url_fopen ini setting, or a custom HTTP handler.');
-		}
-		
-		return $handler;
-	}
+        if (isset($config['endpoint'])) {
+            $this->endpoint = trim(strval($config['endpoint']));
+        }
+
+        if ($this->endpoint === '') {
+            throw new \RuntimeException('endpoint is not set');
+        }
+
+        while ($this->endpoint[strlen($this->endpoint) - 1] === '/') {
+            $this->endpoint = substr($this->endpoint, 0, strlen($this->endpoint) - 1);
+        }
+
+        if (strpos($this->endpoint, 'http') !== 0) {
+            $this->endpoint = 'https://' . $this->endpoint;
+        }
+
+        if (isset($config['signature'])) {
+            $this->signature = strval($config['signature']);
+        }
+
+        if (isset($config['path_style'])) {
+            $this->pathStyle = $config['path_style'];
+        }
+
+        if (isset($config['region'])) {
+            $this->region = strval($config['region']);
+        }
+
+        if (isset($config['ssl_verify'])) {
+            $this->sslVerify = $config['ssl_verify'];
+        } else {
+            if (isset($config['ssl.certificate_authority'])) {
+                $this->sslVerify = $config['ssl.certificate_authority'];
+            }
+        }
+
+        if (isset($config['max_retry_count'])) {
+            $this->maxRetryCount = intval($config['max_retry_count']);
+        }
+
+        if (isset($config['timeout'])) {
+            $this->timeout = intval($config['timeout']);
+        }
+
+        if (isset($config['socket_timeout'])) {
+            $this->socketTimeout = intval($config['socket_timeout']);
+        }
+
+        if (isset($config['connect_timeout'])) {
+            $this->connectTimeout = intval($config['connect_timeout']);
+        }
+
+        if (isset($config['chunk_size'])) {
+            $this->chunkSize = intval($config['chunk_size']);
+        }
+
+        if (isset($config['exception_response_mode'])) {
+            $this->exceptionResponseMode = $config['exception_response_mode'];
+        }
+
+        if (isset($config['is_cname'])) {
+            $this->isCname = $config['is_cname'];
+        }
+
+        $host = parse_url($this->endpoint)['host'];
+        if (filter_var($host, FILTER_VALIDATE_IP) !== false) {
+            $this->pathStyle = true;
+        }
+
+        $handler = self::choose_handler($this);
+
+        $this->httpClient = new Client(
+            [
+                'timeout' => 0,
+                'read_timeout' => $this->socketTimeout,
+                'connect_timeout' => $this->connectTimeout,
+                'allow_redirects' => false,
+                'verify' => $this->sslVerify,
+                'expect' => false,
+                'handler' => HandlerStack::create($handler),
+                'curl' => [
+                    CURLOPT_BUFFERSIZE => $this->chunkSize
+                ]
+            ]
+        );
+    }
+
+    public function __destruct()
+    {
+        $this->close();
+    }
+
+    public function refresh($key, $secret, $security_token = false)
+    {
+        $this->ak = strval($key);
+        $this->sk = strval($secret);
+        if ($security_token) {
+            $this->securityToken = strval($security_token);
+        }
+    }
+
+    /**
+     * Get the default User-Agent string to use with Guzzle
+     *
+     * @return string
+     */
+    private static function default_user_agent()
+    {
+        static $defaultAgent = '';
+        if (!$defaultAgent) {
+            $defaultAgent = 'OSS-sdk-php/' . self::SDK_VERSION;
+        }
+
+        return $defaultAgent;
+    }
+
+    /**
+     * Factory method to create a new OSS client using an array of configuration options.
+     *
+     * @param array $config Client configuration data
+     *
+     * @return OSSClient
+     */
+    public static function factory(array $config = [])
+    {
+        return new OSSClient($config);
+    }
+
+    public function close()
+    {
+        if ($this->factorys) {
+            foreach ($this->factorys as $factory) {
+                $factory->close();
+            }
+        }
+    }
+
+    public function initLog(array $logConfig = [])
+    {
+        OSSLog::initLog($logConfig);
+
+        $msg = [];
+        $msg[] = '[OSS SDK Version=' . self::SDK_VERSION;
+        $msg[] = 'Endpoint=' . $this->endpoint;
+        $msg[] = 'Access Mode=' . ($this->pathStyle ? 'Path' : 'Virtual Hosting') . ']';
+
+        OSSLog::commonLog(WARNING, implode("];[", $msg));
+    }
+
+    private static function choose_handler($OSSclient)
+    {
+        $handler = null;
+        if (function_exists('curl_multi_exec') && function_exists('curl_exec')) {
+            $f1 = new SdkCurlFactory(50);
+            $f2 = new SdkCurlFactory(3);
+            $OSSclient->factorys[] = $f1;
+            $OSSclient->factorys[] = $f2;
+            $handler = Proxy::wrapSync(
+                new CurlMultiHandler(['handle_factory' => $f1]),
+                new CurlHandler(['handle_factory' => $f2])
+            );
+        } elseif (function_exists('curl_exec')) {
+            $f = new SdkCurlFactory(3);
+            $OSSclient->factorys[] = $f;
+            $handler = new CurlHandler(['handle_factory' => $f]);
+        } elseif (function_exists('curl_multi_exec')) {
+            $f = new SdkCurlFactory(50);
+            $OSSclient->factorys[] = $f;
+            $handler = new CurlMultiHandler(['handle_factory' => $f1]);
+        }
+
+        if (ini_get('allow_url_fopen')) {
+            $handler = $handler
+                ? Proxy::wrapStreaming($handler, new SdkStreamHandler())
+                : new SdkStreamHandler();
+        } elseif (!$handler) {
+            throw new \RuntimeException(
+                'GuzzleHttp requires cURL, the '
+                . 'allow_url_fopen ini setting, or a custom HTTP handler.'
+            );
+        }
+
+        return $handler;
+    }
+
+    public function generateSignList($content, $key)
+    {
+        if (!is_array($content)) {
+            $str_arr = explode(',', $content);
+        } else {
+            $str_arr = $content;
+        }
+        $res_arr = [];
+        foreach ($str_arr as $v) {
+            array_push($res_arr, $this->getSignature($v, $key));
+        }
+        return ['signatureList' => $res_arr];
+    }
+
+
+    private function getSignature($str, $key)
+    {
+        if (function_exists('hash_hmac')) {
+            $signature = base64_encode(hash_hmac("sha1", $str, $key, true));
+        } else {
+            $blocksize = 64;
+            $hashfunc = 'sha1';
+            if (strlen($key) > $blocksize) {
+                $key = pack('H*', $hashfunc($key));
+            }
+            $key = str_pad($key, $blocksize, chr(0x00));
+            $ipad = str_repeat(chr(0x36), $blocksize);
+            $opad = str_repeat(chr(0x5c), $blocksize);
+            $hmac = pack(
+                'H*',
+                $hashfunc(
+                    ($key ^ $opad) . pack(
+                        'H*',
+                        $hashfunc(
+                            ($key ^ $ipad) . $str
+                        )
+                    )
+                )
+            );
+            $signature = base64_encode($hmac);
+        }
+        return $signature;
+    }
 }
