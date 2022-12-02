@@ -54,8 +54,20 @@ $OSSClient = OSSClient::factory ( [
 		'endpoint' => $endpoint,
 		'socket_timeout' => 30,
 		'connect_timeout' => 10
-] );
+]);
 
+/**
+ * simaple
+ * $content 需要加密的数组
+ * $secret  应用秘钥
+ */
+
+$OSSClient->generateSignList($content,$secret);
+
+
+/**
+ * other
+ */
 $httpClient = new Client(['verify' => false]);
 
 /*
