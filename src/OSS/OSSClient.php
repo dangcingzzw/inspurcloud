@@ -58,6 +58,7 @@ define('EMERGENCY', Logger::EMERGENCY);
  * @method Model formatConversionOperation(array $args = []);
  * @method Model averageHueOperation(array $args = []);
  * @method Model pannelMogrOperation(array $args = []);
+ * @method Model getAvInfoOperation(array $args = []);
  *
  * @method Model createPostSignature(array $args = []);
  * @method Model createSignedUrl(array $args = []);

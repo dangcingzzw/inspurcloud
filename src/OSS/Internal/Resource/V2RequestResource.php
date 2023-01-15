@@ -20,6 +20,31 @@ class V2RequestResource
 {
     public static $RESOURCE_ARRAY = [
         'operations' => [
+            'getAvInfoOperation' => [
+                'httpMethod' => 'GET',
+                'requestParameters' => [
+                    'ACL' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                        'sentAs' => 'x-OSS-acl',
+                        'transform' => 'aclHeader'
+                    ],
+                    'Body' => [
+                        'file' => 'string',
+                        'instructions' => 'string',
+                    ],
+                ],
+                'responseParameters' => [
+                    'Location' => [
+                        'type' => 'string',
+                        'location' => 'header',
+                    ],
+                    'RequestId' => [
+                        'location' => 'header',
+                        'sentAs' => 'x-amz-request-id'
+                    ]
+                ]
+            ],
             'pannelMogrOperation' => [
                 'httpMethod' => 'GET',
                 'requestParameters' => [

@@ -436,6 +436,18 @@ type:压缩类型 可选参数：avif,heif
     ]);
 ```
 
+获取媒体文件元数据
+参数说明：
+file:待处理的文件名
+
+- 代码示例：
+```php
+    $res=$OSSClient->GetAvInfoOperation([
+        'body' => [
+            'file' => 'xxx.mp4',
+        ]
+    ]);
+```
 [packagist]: http://packagist.org
 
 [install-packagist]: https://packagist.org/packages/lcsdk/php-oss-sdk
