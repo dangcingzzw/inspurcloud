@@ -6,7 +6,7 @@
 ```bash
 $ composer require inspurcloud/php-oss-sdk
 ```
-* 直接下载安装，SDK 没有依赖其他第三方库，但需要参照 composer 的 autoloader，增加一个自己的 autoloader 程序。
+* 直接下载安装，但需要参照 composer 的 autoloader，增加一个自己的 autoloader 程序。
 
 ## 运行环境
 
