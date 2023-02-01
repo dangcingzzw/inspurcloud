@@ -442,11 +442,11 @@ file:待处理的文件名
 
 - 代码示例：
 ```php
-    $res=$OSSClient->GetAvInfoOperation([
+$OSSClient->GetAvInfoOperation([
         'body' => [
             'file' => 'xxx.mp4',
         ]
-    ]);
+   ]);
 ```
 [packagist]: http://packagist.org
 
