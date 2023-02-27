@@ -25,6 +25,7 @@ class GetInfoOperation{
         $fileName=$params['body']['file'];
         $domain = $fileName.'?x-oss-process=image/';
         $res=(new RequestResource())->request($domain,$instr_name)??[];
+        var_dump($res);die;
         return $res;
     }
 

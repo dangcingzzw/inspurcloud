@@ -54,6 +54,7 @@ class Constants {
             'storageclass',
             'replication',
             'append',
+            'avinfo',
             'position',
             'x-oss-process'
     ];

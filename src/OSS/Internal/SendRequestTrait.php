@@ -565,6 +565,7 @@ trait SendRequestTrait
 
 	protected function makeRequest($model, &$operation, $params, $endpoint = null)
 	{
+
 		if($endpoint === null){
 			$endpoint = $this->endpoint;
 		}
@@ -573,10 +574,9 @@ trait SendRequestTrait
 		new DefaultSignature($this->ak, $this->sk, $this->pathStyle, $endpoint, $model['method'], $this->signature, $this->securityToken, $this->isCname);
 
        if(!isset($params['Key']) || $params['Key']==''){
-           $params['Key']=$this->getRandFileName().'.jpg';
+           $params['Key']=$this->getRandFileName();
        }
         $authResult = $signatureInterface -> doAuth($operation, $params, $model);
-
 		$httpMethod = $authResult['method'];
 		OSSLog::commonLog(DEBUG, 'perform '. strtolower($httpMethod) . ' request with url ' . $authResult['requestUrl']);
 		OSSLog::commonLog(DEBUG, 'cannonicalRequest:' . $authResult['cannonicalRequest']);
@@ -592,6 +592,7 @@ trait SendRequestTrait
 
         if(strpos($model['method'],'Operation')){
             $objectUrl=Handler::create($model['method'],$params);
+
             if($model['method']== 'getInfoOperation'){
                 $model['info']=['value' =>$objectUrl??[]];
                 $model['ObjectURL'] = ['value' => $objectUrl];
@@ -601,12 +602,18 @@ trait SendRequestTrait
             }elseif($model['method']=='averageHueOperation'){
                 $model['color'] = ['value' => $objectUrl];
                 $model['ObjectURL'] = ['value' => $objectUrl];
+
+            }elseif($model['method']=='getAvInfoOperation'){
+                $model['ObjectURL'] = ['value' => $objectUrl['url']];
+                $authResult['requestUrl']=$objectUrl['url'];
+                $model['result'] = ['value' => $objectUrl['result']];
+                $authResult['headers']=[];
             }else{
                 $model['ObjectURL'] = ['value' => $objectUrl];
             }
-
         }
-		return new Request($httpMethod, $authResult['requestUrl'], $authResult['headers'], $authResult['body']);
+
+        return new Request($httpMethod, $authResult['requestUrl'], $authResult['headers'], $authResult['body']);
 	}
 	
 	
@@ -640,14 +647,12 @@ trait SendRequestTrait
 				}
 				$saveAsStream = true;
 			}
-			
 			if(isset($params['SaveAsFile']) && isset($params['FilePath'])){
 				$OSSException = new OSSException('SaveAsFile cannot be used with FilePath together');
 				$OSSException-> setExceptionType('client');
 				throw $OSSException;
 			}
 		}
-
 
 		$promise = $this->httpClient->sendAsync($request, ['stream' => $saveAsStream])->then(
 		    function(Response $response) use ($model, $operation, $params, $request, $requestCount, $start){

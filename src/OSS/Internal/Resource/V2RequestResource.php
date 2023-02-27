@@ -23,25 +23,30 @@ class V2RequestResource
             'getAvInfoOperation' => [
                 'httpMethod' => 'GET',
                 'requestParameters' => [
-                    'ACL' => [
+                    'file' => [
+                        'required' => true,
                         'type' => 'string',
-                        'location' => 'header',
-                        'sentAs' => 'x-OSS-acl',
-                        'transform' => 'aclHeader'
-                    ],
-                    'Body' => [
-                        'file' => 'string',
-                        'instructions' => 'string',
+                        'location' => 'uri'
                     ],
                 ],
                 'responseParameters' => [
-                    'Location' => [
-                        'type' => 'string',
-                        'location' => 'header',
-                    ],
-                    'RequestId' => [
-                        'location' => 'header',
-                        'sentAs' => 'x-amz-request-id'
+                    'type' => 'object',
+                    'properties' => [
+                        'Body' => [
+                            'type' => 'stream',
+                            'location' => 'body'
+                        ],
+                        'LastModified' => [
+                            'type' => 'string',
+                            'location' => 'header',
+                            'sentAs' => 'last-modified'
+                        ],
+                        'ContentLength' => [
+                            'type' => 'integer',
+                            'location' => 'header',
+                            'sentAs' => 'content-length'
+                        ],
+
                     ]
                 ]
             ],

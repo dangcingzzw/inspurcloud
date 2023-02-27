@@ -23,11 +23,14 @@ class GetAvInfoOperation
 
     public function main($params)
     {
-        $instr_name = '';
-        $fileName = $params['body']['file'];
-        $domain = $fileName . '?avinfo';
-        var_dump($domain);die;
-        $res = (new RequestResource())->request($domain, $instr_name) ?? [];
-        return $res;
+        $instr_name= 'avinfo';
+        $fileName=$params['body']['file'];
+        $domain = $fileName;
+
+        $res=(new RequestResource())->request($fileName,$instr_name);
+        if(isset($res) && isset($res['result'])){
+            return ['url'=>$domain.'?'.$instr_name,'result'=>$res['result']];
+        }
+        return ['url'=>$domain.'?'.$instr_name];
     }
 }

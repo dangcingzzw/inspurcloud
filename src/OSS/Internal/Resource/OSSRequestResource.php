@@ -23,25 +23,22 @@ class OSSRequestResource {
             'getAvInfoOperation' => [
                 'httpMethod' => 'GET',
                 'requestParameters' => [
-                    'ACL' => [
-                        'type' => 'string',
-                        'location' => 'header',
-                        'sentAs' => 'x-OSS-acl',
-                        'transform' => 'aclHeader'
-                    ],
                     'Body' => [
                         'file' => 'string',
                         'instructions' => 'string',
                     ],
                 ],
                 'responseParameters' => [
-                    'Location' => [
-                        'type' => 'string',
-                        'location' => 'header',
-                    ],
-                    'RequestId' => [
-                        'location' => 'header',
-                        'sentAs' => 'x-amz-request-id'
+                    'type' => 'object',
+                    'properties' => [
+                        'Result' => [
+                            'type' => 'object',
+                            'location' => 'result',
+                        ],
+                        'RequestId' => [
+                            'location' => 'header',
+                            'sentAs' => 'x-amz-request-id'
+                        ]
                     ]
                 ]
             ],

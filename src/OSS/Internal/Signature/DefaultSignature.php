@@ -34,14 +34,13 @@ class DefaultSignature extends AbstractSignature
 	}
 	
 	public function doAuth(array &$requestConfig, array &$params, Model $model)
-	{   
+	{
 		$result = $this -> prepareAuth($requestConfig, $params, $model);
 		
 		$result['headers']['Date'] = gmdate('D, d M Y H:i:s \G\M\T');
 		$canonicalstring = $this-> makeCanonicalstring($result['method'], $result['headers'], $result['pathArgs'], $result['dnsParam'], $result['uriParam']);
-		
-		$result['cannonicalRequest'] = $canonicalstring;
-		
+        $result['cannonicalRequest'] = $canonicalstring;
+
 		$signature = base64_encode(hash_hmac('sha1', $canonicalstring, $this->sk, true));
 		
 		$constants = Constants::selectConstants($this -> signature);
@@ -50,7 +49,7 @@ class DefaultSignature extends AbstractSignature
 		$authorization = $signatureFlag . ' ' . $this->ak . ':' . $signature;
 		
 		$result['headers']['Authorization'] = $authorization;
-		
+
 		return $result;
 	}	
 	

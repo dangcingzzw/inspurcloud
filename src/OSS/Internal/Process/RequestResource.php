@@ -16,17 +16,27 @@
  */
 
 namespace OSS\Internal\Process;
+
+use Cassandra\Varint;
 use OSS\OSSException;
 
-class RequestResource{
+class RequestResource
+{
 
-    public  function request($domain,$path, $query = [], $body = [], $method = 'GET', $timeout = 15)
+    public function request($domain, $path, $query = [], $body = [], $method = 'GET', $timeout = 15)
     {
         $method = strtoupper($method);
-        $apiGateway = rtrim($domain, '/') . '/' . ltrim(
-                $path,
-                '/'
-            ) . ($query ? '?' . http_build_query($query) : '');
+
+
+        if ($path == 'avinfo') {
+            $apiGateway = $domain . '?' . $path;
+        }else{
+            $apiGateway = rtrim($domain, '/') . '/' . ltrim(
+                    $path,
+                    '/'
+                ) . ($query ? '?' . http_build_query($query) : '');
+        }
+
         $timestamp = $this->getMillisecond();
         $params = ["path_url" => $path];
         if ($query) {
@@ -60,7 +70,7 @@ class RequestResource{
         }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $apiGateway);
-        $header = [ ];
+        $header = [];
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         $jsonStr = $body ? json_encode($body) : ''; //转换为json格式
         if ($method == 'POST') {
@@ -84,14 +94,13 @@ class RequestResource{
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonStr);
             }
         }
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE); //表示不检查证书
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE); //信任任何证书
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false); //表示不检查证书
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false); //信任任何证书
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
         $response = curl_exec($ch);
         curl_close($ch);
         $response = json_decode($response, true);
-
         return $response;
     }
 
@@ -106,6 +115,7 @@ class RequestResource{
             }
         }
     }
+
     private function getMillisecond()
     {
         list($t1, $t2) = explode(' ', microtime());

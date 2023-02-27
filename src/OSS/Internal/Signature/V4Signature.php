@@ -71,7 +71,6 @@ class V4Signature extends AbstractSignature
 		$authorization = 'AWS4-HMAC-SHA256 ' . 'Credential=' . $credential. ',' . 'SignedHeaders=' . $signedHeaders . ',' . 'Signature=' . $signature;
 		
 		$result['headers']['Authorization'] = $authorization;
-		
 		return $result;
 	}
 	

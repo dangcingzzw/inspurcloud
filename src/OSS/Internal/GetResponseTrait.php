@@ -342,13 +342,14 @@ trait GetResponseTrait
 	protected function parseResponse(Model $model, Request $request, Response $response, array $requestConfig)
 	{
 		$statusCode = $response -> getStatusCode();
+
 		$expectedLength = $response -> getHeaderLine('content-length');
         $responseContentType = $response -> getHeaderLine('content-type');
 
 		$expectedLength = is_numeric($expectedLength) ? floatval($expectedLength) : null;
 		
 		$body = new CheckoutStream($response->getBody(), $expectedLength);
-		
+
 		if($statusCode >= 300){
 			if($this-> exceptionResponseMode){
 				$OSSException= new OSSException();
@@ -363,6 +364,7 @@ trait GetResponseTrait
 				throw $OSSException;
 			}else{
 				$this->parseCommonHeaders($model, $response);
+
                 if ($responseContentType === 'application/json') {
                     $this->parseJsonToModel($body, $model);
                 } else {
@@ -391,7 +393,6 @@ trait GetResponseTrait
 				$this->parseItems($responseParameters, $model, $response, $body);
 			}
 		}
-		
 		$model['HttpStatusCode'] = $statusCode;
 		$model['Reason'] = $response -> getReasonPhrase();
 	}
