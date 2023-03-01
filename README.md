@@ -448,6 +448,19 @@ $OSSClient->GetAvInfoOperation([
         ]
    ]);
 ```
+
+获取图片信息
+参数说明：
+file:待处理的文件名
+
+- 代码示例：
+```php
+$OSSClient->GetInfoOperation([
+        'body' => [
+            'file' => 'xxx.jpg',
+        ]
+   ]);
+```
 [packagist]: http://packagist.org
 
 [install-packagist]: https://packagist.org/packages/lcsdk/php-oss-sdk
